@@ -9,12 +9,10 @@ class App extends Component {
   this.PTSEl = React.createRef();
   this.RTRTSGEl = React.createRef();
   this.TSOSEl = React.createRef();
-  this.COEl = React.createRef();
   this.MEl = React.createRef();
   this.WEl = React.createRef();
   this.state = {
     rtrtsgChecked: false,
-    coChecked: false,
     mChecked: false,
     wChecked: false,
     apiResponse: {}
@@ -54,16 +52,6 @@ class App extends Component {
               type="String"
               id="TSOS"
               ref={this.TSOSEl} />
-            </div>
-            <div className="form-control box">
-              <label htmlFor="CapOn">Is hardcap on?</label>
-              <input
-              type="checkbox"
-              id="CO"
-              name="coChecked"
-              ref={this.COEl}
-              checked = {this.state.coChecked}
-              onChange = {this.handleCheckboxChange}/>
             </div>
             <div className="form-control box">
               <label htmlFor="Mens">Is this a mens game?</label>
@@ -125,7 +113,6 @@ class App extends Component {
   const pts = this.PTSEl.current.value;
   const rtrtsg = this.state.rtrtsgChecked;
   const tsos = this.TSOSEl.current.value;
-  const co = this.state.coChecked;
   const m = this.state.mChecked;
   const w = this.state.wChecked;
   var ole_rate;
@@ -162,7 +149,7 @@ class App extends Component {
     ole_rate = "0.63";
   }
 
-  if ( co ) {
+  if ( parseInt(tots) > 85 ) {
     capOn = "1";
     timeStart = "5";
   } else {
