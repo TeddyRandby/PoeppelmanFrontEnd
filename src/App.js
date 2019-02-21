@@ -149,7 +149,7 @@ class App extends Component {
     ole_rate = "0.63";
   }
 
-  if ( parseInt(tots) > 85 ) {
+  if ( parseInt(tsos) > 85 ) {
     capOn = "1";
     timeStart = "5";
   } else {
