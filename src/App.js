@@ -131,7 +131,8 @@ class App extends Component {
   var ole_rate;
   var capOn;
   var secondHalf;
-  var recTeamRecToStartGame
+  var recTeamRecToStartGame;
+  var timeStart = tsos;
 
   if ( !((m && !w) || (w && !m)) ) {
     alert("Must be either mens or womens")
@@ -163,7 +164,7 @@ class App extends Component {
 
   if ( co ) {
     capOn = "1";
-    tsos = "5";
+    timeStart = "5";
   } else {
     capOn = "0";
   }
@@ -176,7 +177,7 @@ class App extends Component {
     PullTeam_Score: "${pts}",
     RecTeam_RecToStartGame: "${recTeamRecToStartGame}",
     SecondHalf: "${secondHalf}",
-    Time_StartofSim: "${tsos}",
+    Time_StartofSim: "${timeStart}",
     CapOn: "${capOn}",
     OLE_Rate: "${ole_rate}"
   }) {
