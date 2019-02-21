@@ -8,14 +8,12 @@ class App extends Component {
   this.RTSEl = React.createRef();
   this.PTSEl = React.createRef();
   this.RTRTSGEl = React.createRef();
-  this.SHEl = React.createRef();
   this.TSOSEl = React.createRef();
   this.COEl = React.createRef();
   this.MEl = React.createRef();
   this.WEl = React.createRef();
   this.state = {
     rtrtsgChecked: false,
-    shChecked: false,
     coChecked: false,
     mChecked: false,
     wChecked: false,
@@ -48,16 +46,6 @@ class App extends Component {
               name="rtrtsgChecked"
               ref={this.RTRTSGEl}
               checked = {this.state.rtrtsgChecked}
-              onChange = {this.handleCheckboxChange} />
-            </div>
-            <div className="form-control box ">
-              <label htmlFor="Second_Half">Is it the second half?</label>
-              <input
-              type="checkbox"
-              id="SH"
-              name="shChecked"
-              ref={this.SHEl}
-              checked = {this.state.shChecked}
               onChange = {this.handleCheckboxChange} />
             </div>
             <div className="form-control text ">
@@ -136,7 +124,6 @@ class App extends Component {
   const rts = this.RTSEl.current.value;
   const pts = this.PTSEl.current.value;
   const rtrtsg = this.state.rtrtsgChecked;
-  const sh = this.state.shChecked;
   const tsos = this.TSOSEl.current.value;
   const co = this.state.coChecked;
   const m = this.state.mChecked;
@@ -151,23 +138,22 @@ class App extends Component {
     return;
   }
 
-  if ( sh ) {
-    secondHalf = "1";
-  } else {
-    secondHalf = "0";
-  }
-
-// Yes- it is unintuitive for 0 to be true and 1 to be false.
-// Blame the guy who got the data and made the CSV, not me.
   if ( rtrtsg ) {
     recTeamRecToStartGame = "0";
   } else {
     recTeamRecToStartGame = "1";
   }
 
-  if ( sh ) {
+  if ( parseInt(rts) >= 8 || parseInt(pts) >= 8) {
+    secondHalf = "1";
     recTeamRecToStartGame = "1";
+  } else {
+    secondHalf = "0";
   }
+
+// Yes- it is unintuitive for 0 to be true and 1 to be false.
+// Blame the guy who got the data and made the CSV, not me.
+
 
   if ( m ) {
     ole_rate = "0.7";
