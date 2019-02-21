@@ -177,6 +177,7 @@ class App extends Component {
 
   if ( co ) {
     capOn = "1";
+    tsos = "5";
   } else {
     capOn = "0";
   }
