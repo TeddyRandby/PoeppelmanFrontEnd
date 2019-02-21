@@ -102,14 +102,17 @@ class App extends Component {
           <table className="table-wrapper">
             <tbody>
               <tr>
+                <th> </th>
                 <th> Predicted Scores </th>
                 <th> Chance to win </th>
               </tr>
               <tr>
+                <th> Receiving Team: </th>
                 <td> {this.state.apiResponse.RecTeam_Avg_Score} </td>
                 <td> {this.state.apiResponse.RecTeam_Win_Prob} </td>
               </tr>
               <tr>
+                <th> Pulling Team: </th>
                 <td> {this.state.apiResponse.PullTeam_Avg_Score} </td>
                 <td> {this.state.apiResponse.PullTeam_Win_Prob} </td>
               </tr>
@@ -159,6 +162,10 @@ class App extends Component {
   if ( rtrtsg ) {
     recTeamRecToStartGame = "0";
   } else {
+    recTeamRecToStartGame = "1";
+  }
+
+  if ( sh ) {
     recTeamRecToStartGame = "1";
   }
 

@@ -1,8 +1,10 @@
 .App {
-  padding: 5rem;
+  padding-top: 5rem;
   display: flex;
   margin: 0 auto;
-  width: 100%
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .Header {
@@ -13,6 +15,7 @@
 .text  {
   display: flex;
   flex-direction: column;
+
 }
 
 .box input {
@@ -21,4 +24,13 @@
 
 .table-wrapper {
   text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+  padding: .5rem;
 }
