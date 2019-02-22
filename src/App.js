@@ -36,7 +36,14 @@ class App extends Component {
               <label htmlFor="PullTeam_Score">Pulling Team's Score</label>
               <input type="String" id="PTS" ref={this.PTSEl} />
             </div>
-            <div className="form-control">
+            <div className="form-control text ">
+              <label htmlFor="Time_StartofSim">How much time has passed in the game?</label>
+              <input
+              type="String"
+              id="TSOS"
+              ref={this.TSOSEl} />
+            </div>
+            <div className="form-control box">
               <label htmlFor="RecTeam_RecToStartGame">Did the receiving team receive to start the game?</label>
               <input
               type="checkbox"
@@ -45,13 +52,6 @@ class App extends Component {
               ref={this.RTRTSGEl}
               checked = {this.state.rtrtsgChecked}
               onChange = {this.handleCheckboxChange} />
-            </div>
-            <div className="form-control text ">
-              <label htmlFor="Time_StartofSim">How much time has passed in the game?</label>
-              <input
-              type="String"
-              id="TSOS"
-              ref={this.TSOSEl} />
             </div>
             <div className="form-control box">
               <label htmlFor="Mens">Is this a mens game?</label>
