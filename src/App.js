@@ -1,93 +1,84 @@
-import React, { useState } from 'react';
-import './App.css';
-import './components/RecScore'
-import './components/PullScore'
-import './components/TimePassed'
-import './components/Division'
-import './components/StartedReceiving'
+import React, { useState } from "react";
+import "./App.css";
+import "./components/RecScore";
+import "./components/PullScore";
+import "./components/TimePassed";
+import "./components/Division";
+import "./components/StartedReceiving";
 
 const App = props => {
+  // State monitoring the divisions.
+  // M = Mens Division
+  // W = Womens Division
+  // X = Mixed Divison (not yet implemented -- no data)
+  const [division, setDivision] = useState("M");
 
-    // State monitoring the divisions. 
-    // M = Mens Division
-    // W = Womens Division
-    // X = Mixed Divison (not yet implemented -- no data)
-    const [division, setDivision] = useState('M');
+  // State monitoring the amount of time passed since the start of the game.
+  const [time, setTime] = useState(0);
 
-    // State monitoring the amount of time passed since the start of the game.
-    const [time, setTime] = useState(0);
+  // State monitoring the receiving team's score.
+  const [recScore, setRecScore] = useState(0);
 
-    // State monitoring the receiving team's score.
-    const [recScore, setRecScore] = useState(0);
+  // State monitoring the pulling team's score.
+  const [pullScore, setPullScore] = useState(0);
 
-    // State monitoring the pulling team's score.
-    const [pullScore, setPullScore] = useState(0);
+  // State monitoring which team began the game by receiving.
+  const [startedReceiving, setStartedReceving] = useState("Rec");
 
-    // State monitoring which team began the game by receiving.
-    const [startedReceiving, setStartedReceving] = useState('Rec');
+  // Handlers for the states.
+  const divisionHandler = division => {
+    setDivision(division);
+  };
 
+  const timeHandler = time => {
+    setTime(time);
+  };
 
-    // Handlers for the states.
-    const divisionHandler = division => {
-        setDivision(division);
-    }
+  const recScoreHandler = recScore => {
+    setRecScore(recScore);
+  };
 
-    const timeHandler = time => {
-        setTime(time);
-    }
+  const pullScoreHandler = pullScore => {
+    setPullScore(pullScore);
+  };
 
-    const recScoreHandler = recScore => {
-        setRecScore(recScore);
-    }
+  const startedReceivingHandler = startedReceiving => {
+    setStartedReceving(startedReceiving);
+  };
 
-    const pullScoreHandler = pullScore => {
-        setPullScore(pullScore);
-    }
+  let content = (
+    <div className="App">
+      <h1 className="Header"> Welcome to the Poeppelman Calculator! </h1>
 
-    const startedReceivingHandler = startedReceiving => {
-        setStartedReceving(startedReceiving);
-    }
+      <React.Fragment>
+        <Divison division={selectedDivision} onDivisionSelect={submitHandler} />
+        <Division selectedDivision={selectedDivision} />
+      </React.Fragment>
 
+      <table className="table-wrapper">
+        <tbody>
+          <tr>
+            <th> </th>
+            <th> Predicted Scores </th>
+            <th> Chance to win </th>
+          </tr>
+          <tr>
+            <th> Receiving Team: </th>
+            <td> {this.state.apiResponse.RecTeam_Avg_Score} </td>
+            <td> {this.state.apiResponse.RecTeam_Win_Prob} </td>
+          </tr>
+          <tr>
+            <th> Pulling Team: </th>
+            <td> {this.state.apiResponse.PullTeam_Avg_Score} </td>
+            <td> {this.state.apiResponse.PullTeam_Win_Prob} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
-    let content = (
-      <div className="App">
-            <h1 className="Header"> Welcome to the Poeppelman Calculator! </h1>
-
-            <React.Fragment>
-                <Divison
-                    division={selectedDivision}
-                    onDivisionSelect={submitHandler}
-                />
-                <Division selectedDivision={selectedDivision} />
- 
- 
-            </React.Fragment>
-
-          <table className="table-wrapper">
-            <tbody>
-              <tr>
-                <th> </th>
-                <th> Predicted Scores </th>
-                <th> Chance to win </th>
-              </tr>
-              <tr>
-                <th> Receiving Team: </th>
-                <td> {this.state.apiResponse.RecTeam_Avg_Score} </td>
-                <td> {this.state.apiResponse.RecTeam_Win_Prob} </td>
-              </tr>
-              <tr>
-                <th> Pulling Team: </th>
-                <td> {this.state.apiResponse.PullTeam_Avg_Score} </td>
-                <td> {this.state.apiResponse.PullTeam_Win_Prob} </td>
-              </tr>
-            </tbody>
-          </table>
-      </div>
-    );
-  }
-
-
-  submitHandler = event => {
+submitHandler = event => {
   event.preventDefault();
   const rts = this.RTSEl.current.value;
   const pts = this.PTSEl.current.value;
@@ -101,35 +92,34 @@ const App = props => {
   var recTeamRecToStartGame;
   var timeStart = tsos;
 
-  if ( !((m && !w) || (w && !m)) ) {
-    alert("Must be either mens or womens")
+  if (!((m && !w) || (w && !m))) {
+    alert("Must be either mens or womens");
     return;
   }
 
-  if ( rtrtsg ) {
+  if (rtrtsg) {
     recTeamRecToStartGame = "0";
   } else {
     recTeamRecToStartGame = "1";
   }
 
-  if ( parseInt(rts) >= 8 || parseInt(pts) >= 8) {
+  if (parseInt(rts) >= 8 || parseInt(pts) >= 8) {
     secondHalf = "1";
     recTeamRecToStartGame = "1";
   } else {
     secondHalf = "0";
   }
 
-// Yes- it is unintuitive for 0 to be true and 1 to be false.
-// Blame the guy who got the data and made the CSV, not me.
+  // Yes- it is unintuitive for 0 to be true and 1 to be false.
+  // Blame the guy who got the data and made the CSV, not me.
 
-
-  if ( m ) {
+  if (m) {
     ole_rate = "0.7";
   } else {
     ole_rate = "0.63";
   }
 
-  if ( parseInt(tsos) > 85 ) {
+  if (parseInt(tsos) > 85) {
     capOn = "1";
     timeStart = "5";
   } else {
@@ -157,18 +147,17 @@ const App = props => {
   }
 }
 `
-
   };
-  fetch('https://poeppelman-api.herokuapp.com/api', {
-    method: 'POST',
+  fetch("https://poeppelman-api.herokuapp.com/api", {
+    method: "POST",
     body: JSON.stringify(requestBody),
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json"
     }
   })
     .then(res => {
       if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
+        throw new Error("Failed!");
       }
       return res.json();
     })
@@ -179,21 +168,26 @@ const App = props => {
       poeppelman.RecTeam_Win_Prob = (recProb * 100).toString();
       poeppelman.PullTeam_Win_Prob = (pullProb * 100).toString();
 
-      poeppelman.RecTeam_Win_Prob = poeppelman.RecTeam_Win_Prob.substring(0,6) + "%";
-      poeppelman.RecTeam_Avg_Score = poeppelman.RecTeam_Avg_Score.substring(0,6);
-      poeppelman.PullTeam_Win_Prob = poeppelman.PullTeam_Win_Prob.substring(0,6) + "%";
-      poeppelman.PullTeam_Avg_Score = poeppelman.PullTeam_Avg_Score.substring(0,6);
-
+      poeppelman.RecTeam_Win_Prob =
+        poeppelman.RecTeam_Win_Prob.substring(0, 6) + "%";
+      poeppelman.RecTeam_Avg_Score = poeppelman.RecTeam_Avg_Score.substring(
+        0,
+        6
+      );
+      poeppelman.PullTeam_Win_Prob =
+        poeppelman.PullTeam_Win_Prob.substring(0, 6) + "%";
+      poeppelman.PullTeam_Avg_Score = poeppelman.PullTeam_Avg_Score.substring(
+        0,
+        6
+      );
 
       this.setState({
         apiResponse: poeppelman
-      })
-
+      });
     })
     .catch(err => {
       console.log(err);
     });
 };
-
 
 export default App;
