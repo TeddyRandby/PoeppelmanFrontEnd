@@ -1,80 +1,68 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import './components/RecScore'
+import './components/PullScore'
+import './components/TimePassed'
+import './components/Division'
+import './components/StartedReceiving'
 
-class App extends Component {
+const App = props => {
 
-  constructor(props) {
-  super(props);
-  this.RTSEl = React.createRef();
-  this.PTSEl = React.createRef();
-  this.RTRTSGEl = React.createRef();
-  this.TSOSEl = React.createRef();
-  this.MEl = React.createRef();
-  this.WEl = React.createRef();
-  this.state = {
-    rtrtsgChecked: false,
-    mChecked: false,
-    wChecked: false,
-    apiResponse: {}
-  }
+    // State monitoring the divisions. 
+    // M = Mens Division
+    // W = Womens Division
+    // X = Mixed Divison (not yet implemented -- no data)
+    const [division, setDivision] = useState('M');
 
-}
+    // State monitoring the amount of time passed since the start of the game.
+    const [time, setTime] = useState(0);
 
-  render() {
-    return (
+    // State monitoring the receiving team's score.
+    const [recScore, setRecScore] = useState(0);
+
+    // State monitoring the pulling team's score.
+    const [pullScore, setPullScore] = useState(0);
+
+    // State monitoring which team began the game by receiving.
+    const [startedReceiving, setStartedReceving] = useState('Rec');
+
+
+    // Handlers for the states.
+    const divisionHandler = division => {
+        setDivision(division);
+    }
+
+    const timeHandler = time => {
+        setTime(time);
+    }
+
+    const recScoreHandler = recScore => {
+        setRecScore(recScore);
+    }
+
+    const pullScoreHandler = pullScore => {
+        setPullScore(pullScore);
+    }
+
+    const startedReceivingHandler = startedReceiving => {
+        setStartedReceving(startedReceiving);
+    }
+
+
+    let content = (
       <div className="App">
-        <h1 className="Header"> Welcome to the Poeppelman Calculator! </h1>
-          <form className="PoppelmanForm" onSubmit={this.submitHandler} >
-            <div className="form-control text">
-              <label htmlFor="RecTeam_Score">Receiving Team's Score</label>
-              <input
-              type="String"
-              id="RTS"
-              ref={this.RTSEl} />
-            </div>
-            <div className="form-control text">
-              <label htmlFor="PullTeam_Score">Pulling Team's Score</label>
-              <input type="String" id="PTS" ref={this.PTSEl} />
-            </div>
-            <div className="form-control text ">
-              <label htmlFor="Time_StartofSim">How much time has passed in the game?</label>
-              <input
-              type="String"
-              id="TSOS"
-              ref={this.TSOSEl} />
-            </div>
-            <div className="form-control box">
-              <label htmlFor="RecTeam_RecToStartGame">Did the receiving team receive to start the game?</label>
-              <input
-              type="checkbox"
-              id="RTRTSG"
-              name="rtrtsgChecked"
-              ref={this.RTRTSGEl}
-              checked = {this.state.rtrtsgChecked}
-              onChange = {this.handleCheckboxChange} />
-            </div>
-            <div className="form-control box">
-              <label htmlFor="Mens">Is this a mens game?</label>
-              <input
-              type="checkbox"
-              id="M"
-              name="mChecked"
-              ref={this.MEl}
-              checked = {this.state.mChecked}
-              onChange = {this.handleCheckboxChange} />
-            </div>
-            <div className="form-control box">
-              <label htmlFor="Womens">Is this a womens game?</label>
-              <input
-              type="checkbox"
-              id="W"
-              name="wChecked"
-              ref={this.WEl}
-              checked = {this.state.wChecked}
-              onChange = {this.handleCheckboxChange} />
-            </div>
-            <button type="submit">Submit</button>
-          </form>
+            <h1 className="Header"> Welcome to the Poeppelman Calculator! </h1>
+
+            <React.Fragment>
+                <Divison
+                    division={selectedDivision}
+                    onDivisionSelect={submitHandler}
+                />
+                <Division selectedDivision={selectedDivision} />
+ 
+ 
+            </React.Fragment>
+
           <table className="table-wrapper">
             <tbody>
               <tr>
@@ -98,14 +86,6 @@ class App extends Component {
     );
   }
 
-  handleCheckboxChange = event => {
-    const target = event.target;
-    const value = target.checked;
-    const name = target.name;
-    this.setState({
-      [name]: value
-    });
-  };
 
   submitHandler = event => {
   event.preventDefault();
@@ -214,6 +194,6 @@ class App extends Component {
       console.log(err);
     });
 };
-}
+
 
 export default App;
