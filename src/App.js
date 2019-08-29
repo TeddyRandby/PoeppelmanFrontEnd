@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../node_modules/bulma/css/bulma.css"
+import "../node_modules/bulma/css/bulma.css";
 import RecScoreSelector from "./components/RecScoreSelector";
 import PullScoreSelector from "./components/PullScoreSelector";
 import TimePassedSelector from "./components/TimePassedSelector";
@@ -134,42 +134,104 @@ const App = props => {
           );
 
           setAPIResponse(poeppelman);
-
-          console.log(apiResponse);
         })
         .catch(err => {
           console.log(err);
         });
     },
+    // This array contains the whitelisted states which will "call" this useEffect.
     [pullScore, recScore, division, startedReceiving, time]
   );
 
   let content = (
-    <React.Fragment>
-      <DivisionSelector
-        division={division}
-        onDivisionUpdate={divisionHandler}
-      />
+    <body>
+      <div class="hero is-dark">
+        <div class="hero-body">
+          <div class="content">
+            <h1 class="title"> Poeppelman Calculator </h1>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="container">
+          <div class="columns is-multiline justify-center">
+            <div class="column">
+              <React.Fragment>
+                <div class="field">
+                  <label class="label">Division</label>
+                  <div class="control">
+                    <div class="select">
+                      <DivisionSelector
+                        division={division}
+                        onDivisionUpdate={divisionHandler}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Pulling Team's Score</label>
+                  <div class="control">
+                    <div class="select">
+                      <PullScoreSelector
+                        pullScore={pullScore}
+                        onPullScoreUpdate={pullScoreHandler}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">Receiving Team's Score</label>
+                  <div class="control">
+                    <div class="select">
+                      <RecScoreSelector
+                        recScore={recScore}
+                        onRecScoreUpdate={recScoreHandler}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">
+                    Which team received to start the game?
+                  </label>
+                  <div class="control">
+                    <div class="select">
+                      <ReceivingSelector
+                        startedReceiving={startedReceiving}
+                        onReceivingUpdate={startedReceivingHandler}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">
+                    How much time has passed in the game?
+                  </label>
+                  <div class="control">
+                    <TimePassedSelector
+                      time={time}
+                      onTimeUpdate={timeHandler}
+                    />
+                  </div>
+                </div>
+              </React.Fragment>
+            </div>
+            <div class="column">
+              <h2 class="subtitle has-text-weight-bold">Results:</h2>
+              <div class="container">
+                <div class="content">
+                <p>Receiving Team Win Probability: {apiResponse.RecTeam_Win_Prob} </p>
+                <p>Receiving Team Predicted Score: {apiResponse.RecTeam_Avg_Score} </p>
 
-      <PullScoreSelector
-        pullScore={pullScore}
-        onPullScoreUpdate={pullScoreHandler}
-      />
-
-      <RecScoreSelector
-        recScore={recScore}
-        onRecScoreUpdate={recScoreHandler}
-      />
-
-      <ReceivingSelector
-        startedReceiving={startedReceiving}
-        onReceivingUpdate={startedReceivingHandler}
-      />
-
-      <TimePassedSelector time={time} onTimeUpdate={timeHandler} />
-
-
-    </React.Fragment>
+                <p>Pulling Team Win Probability: {apiResponse.PullTeam_Win_Prob} </p>
+                <p>Pulling Team Predicted Score: {apiResponse.PullTeam_Avg_Score} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
   );
 
   return content;
