@@ -60,11 +60,12 @@ const App = props => {
       var capOn = "0";
       var secondHalf = "0";
       var timeStart = time + "";
+      var receiving = startedReceiving;
 
       // If either of the teams have scored higher than 8, it is passed halftime.
       if (parseInt(pullScore) >= 8 || parseInt(recScore) >= 8) {
         secondHalf = "1";
-        setStartedReceving("0");
+        receiving = "1"
       }
 
       if (division == "m") {
@@ -83,7 +84,7 @@ const App = props => {
             poeppelman(gameQuery: {
               RecTeam_Score: "${recScore}",
               PullTeam_Score: "${pullScore}",
-              RecTeam_RecToStartGame: "${startedReceiving}",
+              RecTeam_RecToStartGame: "${receiving}",
               SecondHalf: "${secondHalf}",
               Time_StartofSim: "${timeStart}",
               CapOn: "${capOn}",
@@ -99,7 +100,6 @@ const App = props => {
           }
           `
       };
-
       fetch("https://poeppelman-api.herokuapp.com/api", {
         method: "POST",
         body: JSON.stringify(requestBody),
