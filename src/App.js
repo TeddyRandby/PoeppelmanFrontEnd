@@ -136,6 +136,8 @@ const App = props => {
           setAPIResponse(poeppelman);
         })
         .catch(err => {
+          alert('No data available');
+          setAPIResponse({});
           console.log(err);
         });
     },
