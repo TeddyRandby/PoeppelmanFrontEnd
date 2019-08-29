@@ -64,7 +64,7 @@ const App = props => {
       // If either of the teams have scored higher than 8, it is passed halftime.
       if (parseInt(pullScore) >= 8 || parseInt(recScore) >= 8) {
         secondHalf = "1";
-        setStartedReceving("1");
+        setStartedReceving("0");
       }
 
       if (division == "m") {
