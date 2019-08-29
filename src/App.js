@@ -139,7 +139,7 @@ const App = props => {
           console.log(err);
         });
     },
-    // This array contains the whitelisted states which will "call" this useEffect.
+    // This array contains the whitelisted states which will "call" this useEffect when changed.
     [pullScore, recScore, division, startedReceiving, time]
   );
 
@@ -169,7 +169,7 @@ const App = props => {
                   </div>
                 </div>
                 <div class="field">
-                  <label class="label">Pulling Team's Score</label>
+                  <label class="label has-text-primary">Pulling Team's Score</label>
                   <div class="control">
                     <div class="select">
                       <PullScoreSelector
@@ -180,7 +180,7 @@ const App = props => {
                   </div>
                 </div>
                 <div class="field">
-                  <label class="label">Receiving Team's Score</label>
+                  <label class="label has-text-info">Receiving Team's Score</label>
                   <div class="control">
                     <div class="select">
                       <RecScoreSelector
@@ -220,11 +220,14 @@ const App = props => {
               <h2 class="subtitle has-text-weight-bold">Results:</h2>
               <div class="container">
                 <div class="content">
-                <p>Receiving Team Win Probability: {apiResponse.RecTeam_Win_Prob} </p>
-                <p>Receiving Team Predicted Score: {apiResponse.RecTeam_Avg_Score} </p>
-
-                <p>Pulling Team Win Probability: {apiResponse.PullTeam_Win_Prob} </p>
-                <p>Pulling Team Predicted Score: {apiResponse.PullTeam_Avg_Score} </p>
+                <p class="has-text-primary has-text-weight-bold">
+                  Pulling Team Win Probability: {apiResponse.PullTeam_Win_Prob} </p>
+                <p class="has-text-primary has-text-weight-bold">
+                  Pulling Team Predicted Score: {apiResponse.PullTeam_Avg_Score} </p>
+                <p class="has-text-info has-text-weight-bold">
+                  Receiving Team Win Probability: {apiResponse.RecTeam_Win_Prob} </p>
+                <p class="has-text-info has-text-weight-bold">
+                  Receiving Team Predicted Score: {apiResponse.RecTeam_Avg_Score} </p>
                 </div>
               </div>
             </div>
