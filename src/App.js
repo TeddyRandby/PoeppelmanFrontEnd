@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../node_modules/bulma/css/bulma.css";
 import RecScoreSelector from "./components/RecScoreSelector";
 import PullScoreSelector from "./components/PullScoreSelector";
-import TimePassedSelector from "./components/TimePassedSelector";
+import GameLengthSelector from "./components/GameLengthSelector";
 import DivisionSelector from "./components/DivisionSelector";
 import ReceivingSelector from "./components/ReceivingSelector";
+import SoftCapSelector from "./components/SoftCapSelector";
 
 const App = props => {
   // State monitoring the divisions.
@@ -13,8 +14,8 @@ const App = props => {
   // X = Mixed Divison (not yet implemented -- no data)
   const [division, setDivision] = useState("m");
 
-  // State monitoring the amount of time passed since the start of the game.
-  const [time, setTime] = useState("0");
+  // State monitoring the total length of the game.
+  const [gameLength, setGameLength] = useState("85");
 
   // State monitoring the receiving team's score.
   const [recScore, setRecScore] = useState("0");
@@ -25,17 +26,21 @@ const App = props => {
   // State monitoring which team began the game by receiving.
   const [startedReceiving, setStartedReceving] = useState("1");
 
+  // State monitoring when hard cap comes on.
+  const [softCap, setSoftCap] = useState("85");
+
+  // State containing the graphQL API's response.
   const [apiResponse, setAPIResponse] = useState({});
 
-  // Handlers for the states.
+  // Handlers for the above states.
   const divisionHandler = event => {
     const division = event.target.value;
     setDivision(division);
   };
 
-  const timeHandler = event => {
+  const gameLengthHandler = event => {
     const time = event.target.value;
-    setTime(time);
+    setGameLength(time);
   };
 
   const recScoreHandler = event => {
@@ -53,13 +58,20 @@ const App = props => {
     setStartedReceving(startedReceiving);
   };
 
+  const softCapHandler = event => {
+    const softCap = event.target.value;
+    setSoftCap(softCap);
+  };
+
+  // This function is run when the page updates, and sends
+  // an API request to update the statistics.
   useEffect(
     event => {
       // Derived parameters
       var ole_rate = "0.63";
       var capOn = "0";
       var secondHalf = "0";
-      var timeStart = time + "";
+      var timeStart = gameLength - softCap;
       var receiving = startedReceiving;
 
       // If either of the teams have scored higher than 8, it is passed halftime.
@@ -68,12 +80,12 @@ const App = props => {
         receiving = "1"
       }
 
-      if (division == "m") {
+      if (division === "m") {
         ole_rate = "0.7";
       }
 
       // If more than 85 minutes have elapsed, hard cap is on.
-      if (parseInt(time) > 85) {
+      if (parseInt(gameLength) > 85) {
         capOn = "1";
         timeStart = "5";
       }
@@ -142,7 +154,7 @@ const App = props => {
         });
     },
     // This array contains the whitelisted states which will "call" this useEffect when changed.
-    [pullScore, recScore, division, startedReceiving, time]
+    [pullScore, recScore, division, startedReceiving, gameLength, softCap]
   );
 
   let content = (
@@ -207,12 +219,25 @@ const App = props => {
                 </div>
                 <div class="field">
                   <label class="label">
-                    How much time has passed in the game?
+                    What is the total length of the game?
                   </label>
                   <div class="control">
-                    <TimePassedSelector
-                      time={time}
-                      onTimeUpdate={timeHandler}
+                    <div class='select'>
+                    <GameLengthSelector
+                      gameLength={gameLength}
+                      onGameLengthUpdate={gameLengthHandler}  
+                    />
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">
+                    How many minutes until softcap?
+                  </label>
+                  <div class="control">
+                    <SoftCapSelector
+                      softCap={softCap}
+                      onSoftCapUpdate={softCapHandler}
                     />
                   </div>
                 </div>
