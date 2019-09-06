@@ -168,7 +168,7 @@ const App = props => {
         });
     },
     // This array contains the whitelisted states which will "call" this useEffect when changed.
-    [pullScore, recScore, division, startedReceiving, gameLength, softCap]
+    [pullScore, recScore, division, startedReceiving, gameLength, softCap, elapsedTime]
   );
 
   let content = (
