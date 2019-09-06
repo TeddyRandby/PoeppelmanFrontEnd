@@ -6,6 +6,7 @@ import GameLengthSelector from "./components/GameLengthSelector";
 import DivisionSelector from "./components/DivisionSelector";
 import ReceivingSelector from "./components/ReceivingSelector";
 import SoftCapSelector from "./components/SoftCapSelector";
+import ElapsedTimeSelector from "./components/ElapsedTimeSelector";
 
 const App = props => {
   // State monitoring the divisions.
@@ -29,8 +30,13 @@ const App = props => {
   // State monitoring when hard cap comes on.
   const [softCap, setSoftCap] = useState("85");
 
+  // State monitoring the elapsed time.
+  const[elapsedTime, setElapsedTime] = useState("0");
+
   // State containing the graphQL API's response.
   const [apiResponse, setAPIResponse] = useState({});
+
+  
 
   // Handlers for the above states.
   const divisionHandler = event => {
@@ -39,8 +45,9 @@ const App = props => {
   };
 
   const gameLengthHandler = event => {
-    const time = event.target.value;
-    setGameLength(time);
+    const gameLength = event.target.value;
+    setGameLength(gameLength);
+    setSoftCap(gameLength - elapsedTime);
   };
 
   const recScoreHandler = event => {
@@ -61,7 +68,14 @@ const App = props => {
   const softCapHandler = event => {
     const softCap = event.target.value;
     setSoftCap(softCap);
+    setElapsedTime(gameLength - softCap);
   };
+
+  const elapsedTimeHandler = event => {
+    const elapsedTime = event.target.value;
+    setElapsedTime(elapsedTime);
+    setSoftCap(gameLength - elapsedTime);
+  }
 
   // This function is run when the page updates, and sends
   // an API request to update the statistics.
@@ -219,7 +233,7 @@ const App = props => {
                 </div>
                 <div class="field">
                   <label class="label">
-                    What is the total length of the game?
+                    What is the total length of the game? (softcap)
                   </label>
                   <div class="control">
                     <div class='select'>
@@ -238,6 +252,17 @@ const App = props => {
                     <SoftCapSelector
                       softCap={softCap}
                       onSoftCapUpdate={softCapHandler}
+                    />
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label">
+                    Elapsed time:
+                  </label>
+                  <div class="control">
+                    <ElapsedTimeSelector
+                      elapsedTime={elapsedTime}
+                      onElapsedTimeUpdate={elapsedTimeHandler}
                     />
                   </div>
                 </div>

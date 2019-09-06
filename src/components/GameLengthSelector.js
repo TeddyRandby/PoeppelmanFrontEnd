@@ -10,6 +10,12 @@ const GameLengthSelector = props => {
     <option key="90" value={"90"}>
       90 Minutes
     </option>
+    <option key="95" value={"95"}>
+      95 Minutes
+    </option>
+    <option key="100" value={"100"}>
+      100 Minutes
+    </option>
   </select>
   );
   return content;
