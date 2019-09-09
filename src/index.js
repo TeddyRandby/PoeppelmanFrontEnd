@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faPlusSquare);
+ReactDOM.render(<App/>, document.getElementById('root'));

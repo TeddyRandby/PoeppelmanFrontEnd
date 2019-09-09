@@ -1,6 +1,6 @@
 import React from "react";
 
-const RecScoreSelector = props => {
+function RecScoreSelector(props) {
   const content = (
     <select onChange={props.onRecScoreUpdate} value={props.recScore}>
       <option key="0" value={"0"}>

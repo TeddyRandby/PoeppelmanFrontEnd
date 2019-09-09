@@ -1,6 +1,6 @@
 import React from "react";
 
-const DivisionSelector = props => {
+function DivisionSelector (props) {
   const content = (
     <select onChange={props.onDivisionUpdate} value={props.divison}>
       <option key="m" value={"m"}>

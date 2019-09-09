@@ -1,16 +1,16 @@
 import React from "react";
 
-const ReceivingSelector = props => {
+function ReceivingSelector (props) {
 
 
   const content = (
     <select onChange={props.onReceivingUpdate} value={props.startedReceiving}>
       <option key="pull" value={"0"}>
-        Pulling Team
+        {props.awayTeam}
       </option>
 
       <option key="rec" value={"1"}>
-        Receiving Team
+        {props.homeTeam}
       </option>
     </select>
   );

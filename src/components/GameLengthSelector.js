@@ -1,7 +1,6 @@
 import React from "react";
-import "../../node_modules/bulma/css/bulma.css";
 
-const GameLengthSelector = props => {
+function GameLengthSelector(props) {
   const content = (
     <select onChange={props.onGameLengthUpdate} value={props.gameLength}>
     <option key="85" value={"85"}>

@@ -1,6 +1,6 @@
 import React from "react";
 
-const PullScoreSelector = props => {
+function PullScoreSelector (props) {
   const content = (
     <select onChange={props.onPullScoreUpdate} value={props.pullScore}>
       <option key="0" value={"0"}>
