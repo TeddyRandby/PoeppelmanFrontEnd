@@ -10,7 +10,6 @@ import ElapsedTimeSelector from "./components/ElapsedTimeSelector";
 import Stopwatch from "./components/Stopwatch";
 import HomeTeamSelector from "./components/HomeTeamSelector";
 import AwayTeamSelector from "./components/AwayTeamSelector";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function App() {
   // State monitoring the divisions.
@@ -23,10 +22,10 @@ function App() {
   const [gameLength, setGameLength] = useState("85");
 
   // State monitoring the receiving team's score.
-  const [recScore, setRecScore] = useState("0");
+  const [recScore, setRecScore] = useState(0);
 
   // State monitoring the pulling team's score.
-  const [pullScore, setPullScore] = useState("0");
+  const [pullScore, setPullScore] = useState(0);
 
   // State monitoring which team began the game by receiving.
   const [received, setStartedReceving] = useState("1");
@@ -71,10 +70,30 @@ function App() {
     setRecScore(recScore);
   };
 
-  const pullScoreHandler = event => {
-    const pullScore = event.target.value;
-    setPullScore(pullScore);
+  const incrementPull = () => {
+    if ( pullScore < 15) {
+      setPullScore(pullScore + 1);
+    }
   };
+
+  const decrementPull = () => {
+    if ( pullScore > 0 ) {
+      setPullScore(pullScore - 1);
+    }
+  }
+
+  const decrementRec = () => {
+    if ( recScore > 0 ) {
+      setRecScore(recScore - 1);
+    }
+  }
+  const incrementRec = () => {
+    if ( recScore < 15) {
+      setRecScore(recScore + 1);
+    }
+  };
+
+
 
   const receivedHandler = event => {
     const startedReceiving = event.target.value;
@@ -273,40 +292,17 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className="field">
-                <label className="label has-text-primary">
-                  {homeTeam}'s Score
-                </label>
-                <div className="level">
-                   <div className="control">
-                      <div className="select">
-                        <RecScoreSelector
-                          recScore={recScore}
-                          onRecScoreUpdate={recScoreHandler}
-                        />
-                      </div>
-                    </div>
-                    <div className="control">
-                      {/* <button className="button" onClick={() => setPullScore(pullScore + 1)}>
-                      <FontAwesomeIcon
-                        icon="plus-square"
-                        size="2x"
-                      />
-                      </button> */}
-                    </div>
-                  </div>
-                </div>
+
               <div className="field">
                 <label className="label has-text-info">
                   {awayTeam}'s Score
                 </label>
                 <div className="control">
-                  <div className="select">
                     <PullScoreSelector
                       pullScore={pullScore}
-                      onPullScoreUpdate={pullScoreHandler}
+                      incrementPull={incrementPull}
+                      decrementPull={decrementPull}
                     />
-                  </div>
                 </div>
               </div>
               <div className="field">
@@ -322,6 +318,17 @@ function App() {
                   </div>
                 </div>
               </div>
+              <div className="field">
+                <label className="label has-text-primary">
+                  {homeTeam}'s Score
+                </label>
+                   <div className="control">
+                        <RecScoreSelector
+                          recScore={recScore}
+                          incrementRec={incrementRec}
+                          decrementRec={decrementRec}                        />
+                    </div>
+                </div>
               <div className="field">
                 <label className="label">
                   What is the total length of the game? (softcap)
@@ -359,18 +366,6 @@ function App() {
             <div className="tile is-parent">
               <div className="tile is-child section">
                 <React.Fragment>
-                  <label className="label has-text-primary">
-                    Home Team:{" "}
-                    <span className="subtitle has-text-gray has-text-weight-light">
-                      (received starting pull)
-                    </span>
-                  </label>
-                  <div className="control">
-                    <HomeTeamSelector
-                      homeTeam={homeTeam}
-                      onHomeTeamUpdate={homeTeamHandler}
-                    />
-                  </div>
                   <label className="label has-text-info">
                     Away Team:{" "}
                     <span className="subtitle has-text-gray has-text-weight-light">
@@ -381,6 +376,18 @@ function App() {
                     <AwayTeamSelector
                       awayTeam={awayTeam}
                       onAwayTeamUpdate={awayTeamHandler}
+                    />
+                  </div>
+                  <label className="label has-text-primary">
+                    Home Team:{" "}
+                    <span className="subtitle has-text-gray has-text-weight-light">
+                      (received starting pull)
+                    </span>
+                  </label>
+                  <div className="control">
+                    <HomeTeamSelector
+                      homeTeam={homeTeam}
+                      onHomeTeamUpdate={homeTeamHandler}
                     />
                   </div>
                 </React.Fragment>
@@ -413,6 +420,21 @@ function App() {
             </div>
 
             <div class="tile is-parent ">
+
+              <div className="tile is-parent is-child is-vertical">
+              <div className="tile has-text-centered is-child box">
+                  <div className="title has-text-info"> {apiResponse.PullTeam_Win_Prob} </div>
+                  <div className="subtitle has-text-info">
+                    {awayTeam}'s Win Probability
+                  </div>
+                </div>
+                <div className="tile has-text-centered is-child box">
+                  <div className="title has-text-info"> {apiResponse.PullTeam_Avg_Score} </div>
+                  <div className="subtitle has-text-info">
+                    {awayTeam}'s Predicted Score
+                  </div>
+                </div>
+              </div>
               <div className="tile is-parent is-child is-vertical">
                 <div className="tile has-text-centered is-child box">
                   <div className="title has-text-primary"> {apiResponse.RecTeam_Win_Prob} </div>
@@ -428,28 +450,15 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className="tile is-parent is-child is-vertical">
-              <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-info"> {apiResponse.PullTeam_Win_Prob} </div>
-                  <div className="subtitle has-text-info">
-                    {awayTeam}'s Win Probability
-                  </div>
-                </div>
-                <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-info"> {apiResponse.PullTeam_Avg_Score} </div>
-                  <div className="subtitle has-text-info">
-                    {awayTeam}'s Predicted Score
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
       <div className="footer has-background-white">
         <div className="content has-text-centered">
-          React App Programming: Teddy Randby, Monte Carlo Programming (R):
-          Craig Poeppleman, Concept: Charles Kerr
+          <p>React App Programming: Teddy Randby - <a class="has-text-link"href="https://github.com/TeddyRandby"> Find me on Github </a></p>
+          <p>Monte Carlo Programming (R): Craig Poeppleman </p>
+          <p>Concept: Charles Kerr </p> 
         </div>
       </div>
     </body>
