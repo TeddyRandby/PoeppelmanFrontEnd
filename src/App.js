@@ -69,7 +69,7 @@ function App() {
     if ( pullScore < 15) {
       setPullScore(pullScore + 1);
     }
-    setStartedReceving("0")
+    setStartedReceving("1")
   };
 
   const decrementPull = () => {
@@ -87,7 +87,7 @@ function App() {
     if ( recScore < 15) {
       setRecScore(recScore + 1);
     }
-    setStartedReceving("1")
+    setStartedReceving("0")
   };
 
   const receivedHandler = event => {
@@ -365,7 +365,8 @@ function App() {
                   <label className="label has-text-info">
                     Away Team:{" "}
                     <span className="subtitle has-text-gray has-text-weight-light">
-                      (pulled starting pull)
+                    (received starting pull)
+
                     </span>
                   </label>
                   <div className="control">
@@ -377,7 +378,8 @@ function App() {
                   <label className="label has-text-primary">
                     Home Team:{" "}
                     <span className="subtitle has-text-gray has-text-weight-light">
-                      (received starting pull)
+                      (pulled starting pull)
+
                     </span>
                   </label>
                   <div className="control">
