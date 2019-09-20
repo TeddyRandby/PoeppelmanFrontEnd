@@ -306,6 +306,17 @@ function App() {
                 </div>
               </div>
               <div className="field">
+                <label className="label has-text-primary">
+                  {homeTeam}'s Score
+                </label>
+                   <div className="control">
+                        <RecScoreSelector
+                          recScore={recScore}
+                          incrementRec={incrementRec}
+                          decrementRec={decrementRec}                        />
+                    </div>
+                </div>
+              <div className="field">
                 <label className="label">Which team received this point?</label>
                 <div className="control">
                   <div className="select">
@@ -318,17 +329,7 @@ function App() {
                   </div>
                 </div>
               </div>
-              <div className="field">
-                <label className="label has-text-primary">
-                  {homeTeam}'s Score
-                </label>
-                   <div className="control">
-                        <RecScoreSelector
-                          recScore={recScore}
-                          incrementRec={incrementRec}
-                          decrementRec={decrementRec}                        />
-                    </div>
-                </div>
+
               <div className="field">
                 <label className="label">
                   What is the total length of the game? (softcap)
