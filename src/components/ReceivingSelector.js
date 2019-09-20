@@ -5,11 +5,11 @@ function ReceivingSelector (props) {
 
   const content = (
     <select onChange={props.onReceivingUpdate} value={props.startedReceiving}>
-      <option key="pull" value={"0"}>
+      <option key="pull" value={"1"}>
         {props.awayTeam}
       </option>
 
-      <option key="rec" value={"1"}>
+      <option key="rec" value={"0"}>
         {props.homeTeam}
       </option>
     </select>

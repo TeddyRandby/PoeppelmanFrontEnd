@@ -38,10 +38,10 @@ function App() {
   const [elapsedTime, setElapsedTime] = useState("0");
 
   // State monitoring seconds for the timer.
-  const [seconds, setSeconds] = useState(0);
+  const [seconds, setSeconds] = useState("00");
 
   // State monitoring minutes for the timer.
-  const [minutes, setMinutes] = useState(0);
+  const [minutes, setMinutes] = useState("00");
 
   // State monitoring the timer's status.
   const [stopwatchOn, setStopwatchOn] = useState(false);
@@ -122,11 +122,21 @@ function App() {
     let interval = null;
     if (stopwatchOn) {
       interval = setInterval(() => {
-        setSeconds(seconds => seconds + 1);
+        let sec = parseInt(seconds) + 1;
+        if (sec < 10) {
+          setSeconds("0" + sec);
+        } else {
+          setSeconds(sec);
+        }
         if (seconds >= 59) {
-          setSeconds(0);
-          setMinutes(minutes + 1);
-          setSoftCap(parseInt(softCap) -1);
+          let min = parseInt(minutes) + 1;
+          setSeconds("00");
+          if (min < 10) {
+            setMinutes("0" + min);
+          } else {
+            setMinutes(min);  
+          }
+          setSoftCap(parseInt(softCap) - 1);
           setElapsedTime(parseInt(elapsedTime) + 1);
         }
       }, 1000);
@@ -227,7 +237,16 @@ function App() {
         });
     },
     // This array contains the whitelisted states which will "call" this useEffect when changed.
-    [pullScore, recScore, division, received, gameLength, softCap, elapsedTime, minutes]
+    [
+      pullScore,
+      recScore,
+      division,
+      received,
+      gameLength,
+      softCap,
+      elapsedTime,
+      minutes
+    ]
   );
 
   const content = (
@@ -239,114 +258,106 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="section">
-        <div className="container">
-          <div className="columns is-multiline justify-center">
-            <div className="column">
-              <React.Fragment>
-                <div className="field">
-                  <label className="label">Division</label>
-                  <div className="control">
-                    <div className="select">
-                      <DivisionSelector
-                        division={division}
-                        onDivisionUpdate={divisionHandler}
-                      />
-                    </div>
+      <div className="tile is-ancestor has-background-light section">
+        <div className="tile is-parent container">
+          <div className="tile is-child box is-3  ">
+            <React.Fragment>
+              <div className="field">
+                <label className="label">Division</label>
+                <div className="control">
+                  <div className="select">
+                    <DivisionSelector
+                      division={division}
+                      onDivisionUpdate={divisionHandler}
+                    />
                   </div>
                 </div>
-                <div className="field">
-                  <label className="label has-text-primary">
-                    {homeTeam}'s Score
-                  </label>
-                  <div className="level">
-                    <div className="level-left">
-                      <div className="control">
-                        <div className="select">
-                          <RecScoreSelector
-                            recScore={recScore}
-                            onRecScoreUpdate={recScoreHandler}
-                          />
-                        </div>
+              </div>
+              <div className="field">
+                <label className="label has-text-primary">
+                  {homeTeam}'s Score
+                </label>
+                <div className="level">
+                   <div className="control">
+                      <div className="select">
+                        <RecScoreSelector
+                          recScore={recScore}
+                          onRecScoreUpdate={recScoreHandler}
+                        />
                       </div>
                     </div>
-                    <div className="level-right">
-                      <div className="control">
-                        {/* <button className="button" onClick={() => setPullScore(pullScore + 1)}>
+                    <div className="control">
+                      {/* <button className="button" onClick={() => setPullScore(pullScore + 1)}>
                       <FontAwesomeIcon
                         icon="plus-square"
                         size="2x"
                       />
                       </button> */}
-                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="field">
-                  <label className="label has-text-info">
-                    {awayTeam}'s Score
-                  </label>
-                  <div className="control">
-                    <div className="select">
-                      <PullScoreSelector
-                        pullScore={pullScore}
-                        onPullScoreUpdate={pullScoreHandler}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="field">
-                  <label className="label">
-                    Which team received this point?
-                  </label>
-                  <div className="control">
-                    <div className="select">
-                      <ReceivingSelector
-                        received={received}
-                        onReceivingUpdate={receivedHandler}
-                        homeTeam={homeTeam}
-                        awayTeam={awayTeam}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="field">
-                  <label className="label">
-                    What is the total length of the game? (softcap)
-                  </label>
-                  <div className="control">
-                    <div className="select">
-                      <GameLengthSelector
-                        gameLength={gameLength}
-                        onGameLengthUpdate={gameLengthHandler}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="field">
-                  <label className="label">
-                    How many minutes until softcap?
-                  </label>
-                  <div className="control">
-                    <SoftCapSelector
-                      softCap={softCap}
-                      onSoftCapUpdate={softCapHandler}
+              <div className="field">
+                <label className="label has-text-info">
+                  {awayTeam}'s Score
+                </label>
+                <div className="control">
+                  <div className="select">
+                    <PullScoreSelector
+                      pullScore={pullScore}
+                      onPullScoreUpdate={pullScoreHandler}
                     />
                   </div>
                 </div>
-                <div className="field">
-                  <label className="label">Elapsed time:</label>
-                  <div className="control">
-                    <ElapsedTimeSelector
-                      elapsedTime={elapsedTime}
-                      onElapsedTimeUpdate={elapsedTimeHandler}
+              </div>
+              <div className="field">
+                <label className="label">Which team received this point?</label>
+                <div className="control">
+                  <div className="select">
+                    <ReceivingSelector
+                      received={received}
+                      onReceivingUpdate={receivedHandler}
+                      homeTeam={homeTeam}
+                      awayTeam={awayTeam}
                     />
                   </div>
                 </div>
-              </React.Fragment>
-            </div>
-            <div className="column">
-              <div className="container">
+              </div>
+              <div className="field">
+                <label className="label">
+                  What is the total length of the game? (softcap)
+                </label>
+                <div className="control">
+                  <div className="select">
+                    <GameLengthSelector
+                      gameLength={gameLength}
+                      onGameLengthUpdate={gameLengthHandler}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="field">
+                <label className="label">How many minutes until softcap?</label>
+                <div className="control">
+                  <SoftCapSelector
+                    softCap={softCap}
+                    onSoftCapUpdate={softCapHandler}
+                  />
+                </div>
+              </div>
+              <div className="field">
+                <label className="label">Elapsed time:</label>
+                <div className="control">
+                  <ElapsedTimeSelector
+                    elapsedTime={elapsedTime}
+                    onElapsedTimeUpdate={elapsedTimeHandler}
+                  />
+                </div>
+              </div>
+            </React.Fragment>
+          </div>
+          <div className="tile is-parent is-vertical container has-background-light">
+            <div className="tile is-parent">
+              <div className="tile is-child section">
                 <React.Fragment>
                   <label className="label has-text-primary">
                     Home Team:{" "}
@@ -374,55 +385,68 @@ function App() {
                   </div>
                 </React.Fragment>
               </div>
-              <h1 className="subtitle has-text-centered has-text-weight-bold">
-                Game Stopwatch
-              </h1>
-              <div className="content has-text-centered">
-                <React.Fragment>
-                  <Stopwatch
-                    seconds={seconds}
-                    minutes={minutes}
-                    stopwatchOn={stopwatchOn}
-                  />
-                </React.Fragment>
-                <button className="button" onClick={stopwatchResetHandler}>
-                  Reset
-                </button>
-                <button
-                  className={`button button-primary button-primary-${
-                    stopwatchOn ? "active" : "inactive"
-                  }`}
-                  onClick={stopwatchOnHandler}
-                >
-                  {stopwatchOn ? "Pause" : "Start"}
-                </button>
+              <div class="tile is-child section">
+                <h1 className="title has-text-centered has-text-weight-bold">
+                  Game Stopwatch
+                </h1>
+                <div className=" has-text-centered">
+                  <React.Fragment>
+                    <Stopwatch
+                      seconds={seconds}
+                      minutes={minutes}
+                      stopwatchOn={stopwatchOn}
+                    />
+                  </React.Fragment>
+                  <button className="button has-background-dark has-text-light" onClick={stopwatchResetHandler}>
+                    Reset
+                  </button>
+                  <button
+                    className={`button has-background-dark has-text-light button-primary-${
+                      stopwatchOn ? "active" : "inactive"
+                    }`}
+                    onClick={stopwatchOnHandler}
+                  >
+                    {stopwatchOn ? "Pause" : "Start"}
+                  </button>
+                </div>
               </div>
-              <h2 className="subtitle has-text-weight-bold">Results:</h2>
-              <div className="container">
-                <div className="content">
-                  <p className="has-text-primary has-text-weight-bold">
-                    {homeTeam}'s Win Probability: {apiResponse.RecTeam_Win_Prob}{" "}
-                  </p>
-                  <p className="has-text-primary has-text-weight-bold">
-                    {homeTeam}'s Predicted Score:{" "}
-                    {apiResponse.RecTeam_Avg_Score}{" "}
-                  </p>
-                  <p className="has-text-info has-text-weight-bold">
-                    {awayTeam}'s Win Probability:{" "}
-                    {apiResponse.PullTeam_Win_Prob}{" "}
-                  </p>
-                  <p className="has-text-info has-text-weight-bold">
-                    {awayTeam}'s' Predicted Score:{" "}
-                    {apiResponse.PullTeam_Avg_Score}{" "}
-                  </p>
+            </div>
+
+            <div class="tile is-parent ">
+              <div className="tile is-parent is-child is-vertical">
+                <div className="tile has-text-centered is-child box">
+                  <div className="title has-text-primary"> {apiResponse.RecTeam_Win_Prob} </div>
+                  <div className="subtitle has-text-primary">
+                    {homeTeam}'s Win Probability
+                  </div>
+                </div>
+
+                <div className="tile has-text-centered is-child box">
+                  <div className="title has-text-primary"> {apiResponse.RecTeam_Avg_Score} </div>
+                  <div className="subtitle has-text-primary">
+                    {homeTeam}'s Predicted Score
+                  </div>
+                </div>
+              </div>
+              <div className="tile is-parent is-child is-vertical">
+              <div className="tile has-text-centered is-child box">
+                  <div className="title has-text-info"> {apiResponse.PullTeam_Win_Prob} </div>
+                  <div className="subtitle has-text-info">
+                    {awayTeam}'s Win Probability
+                  </div>
+                </div>
+                <div className="tile has-text-centered is-child box">
+                  <div className="title has-text-info"> {apiResponse.PullTeam_Avg_Score} </div>
+                  <div className="subtitle has-text-info">
+                    {awayTeam}'s Predicted Score
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="footer">
+      <div className="footer has-background-white">
         <div className="content has-text-centered">
           React App Programming: Teddy Randby, Monte Carlo Programming (R):
           Craig Poeppleman, Concept: Charles Kerr
