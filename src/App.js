@@ -102,8 +102,8 @@ function App() {
   };
   const stopwatchResetHandler = event => {
     const stopwatchOn = event.target.value;
-    setSeconds(0);
-    setMinutes(0);
+    setSeconds("00");
+    setMinutes("00");
     setElapsedTime(0);
     setSoftCap(gameLength);
     setStopwatchOn(stopwatchOn);
