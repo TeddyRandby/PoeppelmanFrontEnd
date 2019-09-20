@@ -65,15 +65,11 @@ function App() {
     setSoftCap(gameLength - elapsedTime);
   };
 
-  const recScoreHandler = event => {
-    const recScore = event.target.value;
-    setRecScore(recScore);
-  };
-
   const incrementPull = () => {
     if ( pullScore < 15) {
       setPullScore(pullScore + 1);
     }
+    setStartedReceving("0")
   };
 
   const decrementPull = () => {
@@ -91,9 +87,8 @@ function App() {
     if ( recScore < 15) {
       setRecScore(recScore + 1);
     }
+    setStartedReceving("1")
   };
-
-
 
   const receivedHandler = event => {
     const startedReceiving = event.target.value;
