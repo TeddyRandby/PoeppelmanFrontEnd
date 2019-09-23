@@ -1,20 +1,25 @@
 import React from "react";
 
-function ReceivingSelector (props) {
-
-
+function ReceivingSelector(props) {
   const content = (
-    <select onChange={props.onReceivingUpdate} value={props.received}>
-      <option key="pull" value={"1"}>
-        {props.awayTeam}
-      </option>
+    <div className="field">
+      <label className="label">Which team received this point?</label>
+      <div className="control">
+        <div className="select">
+          <select onChange={props.onReceivingUpdate} value={props.received}>
+            <option key="pull" value={"away"}>
+              {props.awayTeam}
+            </option>
 
-      <option key="rec" value={"0"}>
-        {props.homeTeam}
-      </option>
-    </select>
+            <option key="rec" value={"home"}>
+              {props.homeTeam}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
   );
   return content;
-};
+}
 
 export default ReceivingSelector;

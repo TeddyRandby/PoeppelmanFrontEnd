@@ -10,7 +10,6 @@ import ElapsedTimeSelector from "./components/ElapsedTimeSelector";
 import Stopwatch from "./components/Stopwatch";
 import HomeTeamSelector from "./components/HomeTeamSelector";
 import AwayTeamSelector from "./components/AwayTeamSelector";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function App() {
   // State monitoring the divisions.
@@ -28,20 +27,21 @@ function App() {
   // State monitoring the pulling team's score.
   const [awayScore, setAwayScore] = useState(0);
 
-  // State monitoring which team began the game by receiving.
-  const [received, setStartedReceving] = useState("1");
+  // State monitoring which team received this point.
+  const [received, setReceving] = useState("away");
+
+  const [teamFirstRec, setFirstRec] = useState("away");
+
+  const [homePulledFirst, setHomePulledFirst] = useState(true);
 
   // State monitoring when hard cap comes on.
   const [softCap, setSoftCap] = useState("85");
 
   // State monitoring the elapsed time.
-  const [elapsedTime, setElapsedTime] = useState("0");
+  const [elapsedMin, setElapsedMin] = useState("00");
 
   // State monitoring seconds for the timer.
   const [seconds, setSeconds] = useState("00");
-
-  // State monitoring minutes for the timer.
-  const [minutes, setMinutes] = useState("00");
 
   // State monitoring the timer's status.
   const [stopwatchOn, setStopwatchOn] = useState(false);
@@ -63,66 +63,78 @@ function App() {
   const gameLengthHandler = event => {
     const gameLength = event.target.value;
     setGameLength(gameLength);
-    setSoftCap(gameLength - elapsedTime);
+    setSoftCap(gameLength - elapsedMin);
   };
 
   const incrementAway = () => {
     if (awayScore < 15) {
       setAwayScore(awayScore + 1);
     }
-    setStartedReceving("0")
+    setReceving("home");
   };
 
   const decrementAway = () => {
     if (awayScore > 0) {
       setAwayScore(awayScore - 1);
     }
-    setStartedReceving("1")
-
+    setReceving("away");
   };
 
   const decrementHome = () => {
     if (homeScore > 0) {
       setHomeScore(homeScore - 1);
     }
-    setStartedReceving("0")
+    setReceving("home");
   };
+
   const incrementHome = () => {
     if (homeScore < 15) {
       setHomeScore(homeScore + 1);
     }
-    setStartedReceving("1")
+    setReceving("away");
   };
 
   const receivedHandler = event => {
-    const startedReceiving = event.target.value;
-    setStartedReceving(startedReceiving);
+    const receiving = event.target.value;
+    setReceving(receiving);
+  };
+
+  const firstPullHomeHandler = event => {
+    setFirstRec("home");
+    setHomePulledFirst(true);
+  };
+
+  const firstPullAwayHandler = event => {
+    setFirstRec("away");
+    setHomePulledFirst(false);
   };
 
   const softCapHandler = event => {
     const softCap = event.target.value;
     setSoftCap(softCap);
-    setElapsedTime(gameLength - softCap);
+    setElapsedMin(gameLength - softCap);
   };
 
-  const elapsedTimeHandler = event => {
+  const elapsedMinHandler = event => {
     const elapsedTime = event.target.value;
-    setElapsedTime(elapsedTime);
+    setElapsedMin(elapsedTime);
     setSoftCap(gameLength - elapsedTime);
   };
+
   const homeTeamHandler = event => {
     const homeTeam = event.target.value;
     setHomeTeam(homeTeam);
   };
+
   const awayTeamHandler = event => {
     const awayTeam = event.target.value;
     setAwayTeam(awayTeam);
   };
+
   const stopwatchResetHandler = event => {
     const stopwatchOn = event.target.value;
     setSeconds("00");
-    setMinutes("00");
-    setElapsedTime(0);
+    setElapsedMin("00");
     setSoftCap(gameLength);
     setStopwatchOn(stopwatchOn);
   };
@@ -147,22 +159,22 @@ function App() {
           setSeconds(sec);
         }
         if (seconds >= 59) {
-          let min = parseInt(minutes) + 1;
+          let min = parseInt(elapsedMin) + 1;
           setSeconds("00");
           if (min < 10) {
-            setMinutes("0" + min);
+            setElapsedMin("0" + min);
           } else {
-            setMinutes(min);
+            setElapsedMin(min);
           }
           setSoftCap(parseInt(softCap) - 1);
-          setElapsedTime(parseInt(elapsedTime) + 1);
+          setElapsedMin(parseInt(elapsedMin) + 1);
         }
       }, 1000);
     } else if (!stopwatchOn && seconds !== 0) {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [stopwatchOn, seconds, minutes]);
+  }, [stopwatchOn, seconds, elapsedMin]);
 
   // This function is run when the page updates, and sends
   // an API request to update the statistics.
@@ -173,7 +185,14 @@ function App() {
       let capOn = "0";
       let secondHalf = "0";
       let timeElapsed = gameLength - softCap;
-      let receiving = received;
+      let receiving;
+
+      // If the receiving team received to start the game, receiving should be 1. Else, 0.
+      if ( teamFirstRec == received) {
+        receiving = "1";
+      } else {
+        receiving = "0";
+      }
 
       // If either of the teams have scored higher than 8, it is passed halftime.
       if (parseInt(awayScore) >= 8 || parseInt(homeScore) >= 8) {
@@ -213,6 +232,7 @@ function App() {
           }
           `
       };
+      console.log(requestBody);
       fetch("https://poeppelman-api.herokuapp.com/api", {
         method: "POST",
         body: JSON.stringify(requestBody),
@@ -264,8 +284,8 @@ function App() {
       received,
       gameLength,
       softCap,
-      elapsedTime,
-      minutes
+      elapsedMin,
+      teamFirstRec
     ]
   );
 
@@ -282,150 +302,80 @@ function App() {
         <div className="tile is-parent container">
           <div className="tile is-child box is-3  ">
             <React.Fragment>
-              <div className="field">
-                <label className="label">Division</label>
-                <div className="control">
-                  <div className="select">
-                    <DivisionSelector
-                      division={division}
-                      onDivisionUpdate={divisionHandler}
-                    />
-                  </div>
-                </div>
-              </div>
+              <DivisionSelector
+                division={division}
+                onDivisionUpdate={divisionHandler}
+              />
 
-              <div className="field">
-                <label className="label has-text-info">
-                  {awayTeam}'s Score
-                </label>
-                <div className="control">
-                  <AwayScoreSelector
-                    awayScore={awayScore}
-                    incrementAway={incrementAway}
-                    decrementAway={decrementAway}
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label has-text-primary">
-                  {homeTeam}'s Score
-                </label>
-                <div className="control">
-                  <HomeScoreSelector
-                    homeScore={homeScore}
-                    incrementHome={incrementHome}
-                    decrementHome={decrementHome}
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">Which team received this point?</label>
-                <div className="control">
-                  <div className="select">
-                    <ReceivingSelector
-                      received={received}
-                      onReceivingUpdate={receivedHandler}
-                      homeTeam={homeTeam}
-                      awayTeam={awayTeam}
-                    />
-                  </div>
-                </div>
-              </div>
+              <AwayScoreSelector
+                awayScore={awayScore}
+                incrementAway={incrementAway}
+                decrementAway={decrementAway}
+                awayTeam={awayTeam}
+              />
 
-              <div className="field">
-                <label className="label">
-                  What is the total length of the game? (softcap)
-                </label>
-                <div className="control">
-                  <div className="select">
-                    <GameLengthSelector
-                      gameLength={gameLength}
-                      onGameLengthUpdate={gameLengthHandler}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">How many minutes until softcap?</label>
-                <div className="control">
-                  <SoftCapSelector
-                    softCap={softCap}
-                    onSoftCapUpdate={softCapHandler}
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">Elapsed time:</label>
-                <div className="control">
-                  <ElapsedTimeSelector
-                    elapsedTime={elapsedTime}
-                    onElapsedTimeUpdate={elapsedTimeHandler}
-                  />
-                </div>
-              </div>
+              <HomeScoreSelector
+                homeScore={homeScore}
+                incrementHome={incrementHome}
+                decrementHome={decrementHome}
+                homeTeam={homeTeam}
+              />
+
+              <ReceivingSelector
+                received={received}
+                onReceivingUpdate={receivedHandler}
+                homeTeam={homeTeam}
+                awayTeam={awayTeam}
+              />
+
+              <GameLengthSelector
+                gameLength={gameLength}
+                onGameLengthUpdate={gameLengthHandler}
+              />
+
+              <SoftCapSelector
+                softCap={softCap}
+                onSoftCapUpdate={softCapHandler}
+              />
+
+              <ElapsedTimeSelector
+                elapsedMin={elapsedMin}
+                onElapsedMinUpdate={elapsedMinHandler}
+                stopwatchOn={stopwatchOn}
+                stopwatchResetHandler={stopwatchResetHandler}
+                stopwatchOnHandler={stopwatchOnHandler}
+              />
             </React.Fragment>
           </div>
           <div className="tile is-parent is-vertical container has-background-light">
             <div className="tile is-parent">
               <div className="tile is-child section">
                 <React.Fragment>
-                  <label className="label has-text-info">
-                    Away Team:{" "}
-                    <span className="subtitle has-text-gray has-text-weight-light">
-                      (pulled starting pull)
-                    </span>
-                  </label>
-                  <div className="control">
-                    <AwayTeamSelector
-                      awayTeam={awayTeam}
-                      onAwayTeamUpdate={awayTeamHandler}
-                    />
-                  </div>
-                  <label className="label has-text-primary">
-                    Home Team:{" "}
-                    <span className="subtitle has-text-gray has-text-weight-light">
-                      (received starting pull)
-                    </span>
-                  </label>
-                  <div className="control">
-                    <HomeTeamSelector
-                      homeTeam={homeTeam}
-                      onHomeTeamUpdate={homeTeamHandler}
-                    />
-                  </div>
+                  <AwayTeamSelector
+                    awayTeam={awayTeam}
+                    onAwayTeamUpdate={awayTeamHandler}
+                    onChange={firstPullAwayHandler}
+                    checked={homePulledFirst}
+                  />
+
+                  <HomeTeamSelector
+                    homeTeam={homeTeam}
+                    onHomeTeamUpdate={homeTeamHandler}
+                    onChange={firstPullHomeHandler}
+                    checked={homePulledFirst}
+                  />
                 </React.Fragment>
               </div>
               <div className="tile is-child section">
-                <h1 className="title has-text-centered has-text-weight-bold">
-                  Game Stopwatch
-                </h1>
-                <div className=" has-text-centered">
-                  <React.Fragment>
-                    <Stopwatch
-                      seconds={seconds}
-                      minutes={minutes}
-                      stopwatchOn={stopwatchOn}
-                    />
-                  </React.Fragment>
-                  <button
-                    className="button has-background-dark has-text-light"
-                    onClick={stopwatchResetHandler}
-                  >
-                    RESET
-                  </button>
-                  <button
-                    className={`button has-background-dark has-text-light button-primary-${
-                      stopwatchOn ? "active" : "inactive"
-                    }`}
-                    onClick={stopwatchOnHandler}
-                  >
-                    {stopwatchOn ?                     <span className="icon is-small">
-                      <FontAwesomeIcon icon="pause" zsize="2x" />
-                    </span> : <span className="icon is-small">
-                      <FontAwesomeIcon icon="play" zsize="2x" />
-                    </span>}
-                  </button>
-                </div>
+                <React.Fragment>
+                  <Stopwatch
+                    seconds={seconds}
+                    minutes={elapsedMin}
+                    stopwatchOn={stopwatchOn}
+                    stopwatchResetHandler={stopwatchResetHandler}
+                    stopwatchOnHandler={stopwatchOnHandler}
+                  />
+                </React.Fragment>
               </div>
             </div>
 
