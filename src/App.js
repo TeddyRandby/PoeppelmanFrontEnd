@@ -10,6 +10,7 @@ import ElapsedTimeSelector from "./components/ElapsedTimeSelector";
 import Stopwatch from "./components/Stopwatch";
 import HomeTeamSelector from "./components/HomeTeamSelector";
 import AwayTeamSelector from "./components/AwayTeamSelector";
+import ResponseRenderer from "./components/ResponseRenderer";
 
 function App() {
   // State monitoring the divisions.
@@ -54,6 +55,8 @@ function App() {
   // State containing the graphQL API's response.
   const [apiResponse, setAPIResponse] = useState({});
 
+  const [isLoading, setLoading] = useState(true);
+
   // Handlers for the above states.
   const divisionHandler = event => {
     const division = event.target.value;
@@ -74,17 +77,28 @@ function App() {
   };
 
   const decrementAway = () => {
+    if (awayScore == 1) {
+      setReceving("away");
+    }
+    if (homeScore == 0 && awayScore == 1) {
+      setReceving(teamFirstRec);
+    }
     if (awayScore > 0) {
       setAwayScore(awayScore - 1);
     }
-    setReceving("away");
   };
 
   const decrementHome = () => {
+    if (homeScore == 1) {
+      setReceving("home");
+    }
+    if (homeScore == 1 && awayScore == 0) {
+      setReceving(teamFirstRec);
+    }
+
     if (homeScore > 0) {
       setHomeScore(homeScore - 1);
     }
-    setReceving("home");
   };
 
   const incrementHome = () => {
@@ -99,14 +113,20 @@ function App() {
     setReceving(receiving);
   };
 
-  const firstPullHomeHandler = event => {
+  const firstRecHomeHandler = event => {
     setFirstRec("home");
     setHomePulledFirst(true);
+    if (homeScore == 0 && awayScore == 0) {
+      setReceving("home");
+    }
   };
 
-  const firstPullAwayHandler = event => {
+  const firstRecAwayHandler = event => {
     setFirstRec("away");
     setHomePulledFirst(false);
+    if (homeScore == 0 && awayScore == 0) {
+      setReceving("away");
+    }
   };
 
   const softCapHandler = event => {
@@ -180,15 +200,26 @@ function App() {
   // an API request to update the statistics.
   useEffect(
     event => {
+      setLoading(true);
+
       // Derived parameters
       let ole_rate = "0.63";
       let capOn = "0";
       let secondHalf = "0";
       let timeElapsed = gameLength - softCap;
       let receiving;
+      let recScore;
+      let pullScore;
 
+      if (received == "home") {
+        recScore = homeScore;
+        pullScore = awayScore;
+      } else {
+        recScore = awayScore;
+        pullScore = homeScore;
+      }
       // If the receiving team received to start the game, receiving should be 1. Else, 0.
-      if ( teamFirstRec == received) {
+      if (teamFirstRec == received) {
         receiving = "1";
       } else {
         receiving = "0";
@@ -214,8 +245,8 @@ function App() {
         query: `
             {
             poeppelman(gameQuery: {
-              RecTeam_Score: "${homeScore}",
-              PullTeam_Score: "${awayScore}",
+              RecTeam_Score: "${recScore}",
+              PullTeam_Score: "${pullScore}",
               RecTeam_RecToStartGame: "${receiving}",
               SecondHalf: "${secondHalf}",
               Time_StartofSim: "${timeElapsed}",
@@ -267,6 +298,7 @@ function App() {
           );
 
           setAPIResponse(poeppelman);
+          setLoading(false);
         })
         .catch(err => {
           alert(
@@ -277,16 +309,7 @@ function App() {
         });
     },
     // This array contains the whitelisted states which will "call" this useEffect when changed.
-    [
-      awayScore,
-      homeScore,
-      division,
-      received,
-      gameLength,
-      softCap,
-      elapsedMin,
-      teamFirstRec
-    ]
+    [awayScore, homeScore, division, received, elapsedMin, teamFirstRec]
   );
 
   const content = (
@@ -354,14 +377,14 @@ function App() {
                   <AwayTeamSelector
                     awayTeam={awayTeam}
                     onAwayTeamUpdate={awayTeamHandler}
-                    onChange={firstPullAwayHandler}
+                    onChange={firstRecAwayHandler}
                     checked={homePulledFirst}
                   />
 
                   <HomeTeamSelector
                     homeTeam={homeTeam}
                     onHomeTeamUpdate={homeTeamHandler}
-                    onChange={firstPullHomeHandler}
+                    onChange={firstRecHomeHandler}
                     checked={homePulledFirst}
                   />
                 </React.Fragment>
@@ -378,50 +401,15 @@ function App() {
                 </React.Fragment>
               </div>
             </div>
-
-            <div className="tile is-parent ">
-              <div className="tile is-parent is-child is-vertical">
-                <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-info">
-                    {" "}
-                    {apiResponse.PullTeam_Win_Prob}{" "}
-                  </div>
-                  <div className="subtitle has-text-info">
-                    {awayTeam}'s Win Probability
-                  </div>
-                </div>
-                <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-info">
-                    {" "}
-                    {apiResponse.PullTeam_Avg_Score}{" "}
-                  </div>
-                  <div className="subtitle has-text-info">
-                    {awayTeam}'s Predicted Score
-                  </div>
-                </div>
-              </div>
-              <div className="tile is-parent is-child is-vertical">
-                <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-primary">
-                    {" "}
-                    {apiResponse.RecTeam_Win_Prob}{" "}
-                  </div>
-                  <div className="subtitle has-text-primary">
-                    {homeTeam}'s Win Probability
-                  </div>
-                </div>
-
-                <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-primary">
-                    {" "}
-                    {apiResponse.RecTeam_Avg_Score}{" "}
-                  </div>
-                  <div className="subtitle has-text-primary">
-                    {homeTeam}'s Predicted Score
-                  </div>
-                </div>
-              </div>
-            </div>
+            <React.Fragment>
+              <ResponseRenderer
+                received={received}
+                apiResponse={apiResponse}
+                awayTeam={awayTeam}
+                homeTeam={homeTeam}
+                isLoading={isLoading}
+              />
+            </React.Fragment>
           </div>
         </div>
       </div>
