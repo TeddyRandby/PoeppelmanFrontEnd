@@ -1,10 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function RecScoreSelector(props) {
+function HomeScoreSelector(props) {
   const content = (
     <div class="is-flex">
-    <button class="button has-text-danger" onClick={props.decrementRec}>
+    <button class="button has-text-danger" onClick={props.decrementHome}>
       <span class="icon is-small">
       <FontAwesomeIcon
         icon="minus"
@@ -13,9 +13,9 @@ function RecScoreSelector(props) {
       </span>
     </button>
     <div class="container">
-      <p class="title content has-text-centered">{props.recScore}</p>
+      <p class="title content has-text-centered">{props.homeScore}</p>
     </div>
-    <button class="button has-text-success" onClick={props.incrementRec}>
+    <button class="button has-text-success" onClick={props.incrementHome}>
       <span class="icon is-small">
       <FontAwesomeIcon
         icon="plus"
@@ -28,4 +28,4 @@ function RecScoreSelector(props) {
   return content;
 };
 
-export default RecScoreSelector;
+export default HomeScoreSelector;

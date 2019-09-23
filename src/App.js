@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../node_modules/bulma/css/bulma.css";
-import RecScoreSelector from "./components/RecScoreSelector";
-import PullScoreSelector from "./components/PullScoreSelector";
+import HomeScoreSelector from "./components/HomeScoreSelector";
+import AwayScoreSelector from "./components/AwayScoreSelector";
 import GameLengthSelector from "./components/GameLengthSelector";
 import DivisionSelector from "./components/DivisionSelector";
 import ReceivingSelector from "./components/ReceivingSelector";
@@ -22,10 +22,10 @@ function App() {
   const [gameLength, setGameLength] = useState("85");
 
   // State monitoring the receiving team's score.
-  const [recScore, setRecScore] = useState(0);
+  const [homeScore, setHomeScore] = useState(0);
 
   // State monitoring the pulling team's score.
-  const [pullScore, setPullScore] = useState(0);
+  const [awayScore, setAwayScore] = useState(0);
 
   // State monitoring which team began the game by receiving.
   const [received, setStartedReceving] = useState("1");
@@ -65,29 +65,29 @@ function App() {
     setSoftCap(gameLength - elapsedTime);
   };
 
-  const incrementPull = () => {
-    if ( pullScore < 15) {
-      setPullScore(pullScore + 1);
+  const incrementAway = () => {
+    if ( awayScore < 15) {
+      setAwayScore(awayScore + 1);
     }
-    setStartedReceving("1")
+    // setStartedReceving("1")
   };
 
-  const decrementPull = () => {
-    if ( pullScore > 0 ) {
-      setPullScore(pullScore - 1);
+  const decrementAway = () => {
+    if ( awayScore > 0 ) {
+      setAwayScore(awayScore - 1);
     }
   }
 
-  const decrementRec = () => {
-    if ( recScore > 0 ) {
-      setRecScore(recScore - 1);
+  const decrementHome = () => {
+    if ( homeScore > 0 ) {
+      setHomeScore(homeScore - 1);
     }
   }
-  const incrementRec = () => {
-    if ( recScore < 15) {
-      setRecScore(recScore + 1);
+  const incrementHome = () => {
+    if ( homeScore < 15) {
+      setHomeScore(homeScore + 1);
     }
-    setStartedReceving("0")
+    // setStartedReceving("0")
   };
 
   const receivedHandler = event => {
@@ -172,7 +172,7 @@ function App() {
       let receiving = received;
 
       // If either of the teams have scored higher than 8, it is passed halftime.
-      if (parseInt(pullScore) >= 8 || parseInt(recScore) >= 8) {
+      if (parseInt(awayScore) >= 8 || parseInt(homeScore) >= 8) {
         secondHalf = "1";
         receiving = "1";
       }
@@ -191,8 +191,8 @@ function App() {
         query: `
             {
             poeppelman(gameQuery: {
-              RecTeam_Score: "${recScore}",
-              PullTeam_Score: "${pullScore}",
+              RecTeam_Score: "${homeScore}",
+              PullTeam_Score: "${awayScore}",
               RecTeam_RecToStartGame: "${receiving}",
               SecondHalf: "${secondHalf}",
               Time_StartofSim: "${timeElapsed}",
@@ -230,30 +230,30 @@ function App() {
           poeppelman.PullTeam_Win_Prob = (pullProb * 100).toString();
 
           poeppelman.RecTeam_Win_Prob =
-            poeppelman.RecTeam_Win_Prob.substring(0, 6) + "%";
+            poeppelman.RecTeam_Win_Prob.substring(0, 4) + "%";
           poeppelman.RecTeam_Avg_Score = poeppelman.RecTeam_Avg_Score.substring(
             0,
-            6
+            4
           );
           poeppelman.PullTeam_Win_Prob =
-            poeppelman.PullTeam_Win_Prob.substring(0, 6) + "%";
+            poeppelman.PullTeam_Win_Prob.substring(0, 4) + "%";
           poeppelman.PullTeam_Avg_Score = poeppelman.PullTeam_Avg_Score.substring(
             0,
-            6
+            4
           );
 
           setAPIResponse(poeppelman);
         })
         .catch(err => {
-          alert("No data available");
+          alert("No data available. Check your internet connection and make sure that the scores entered are correct.");
           setAPIResponse({});
           console.log(err);
         });
     },
     // This array contains the whitelisted states which will "call" this useEffect when changed.
     [
-      pullScore,
-      recScore,
+      awayScore,
+      homeScore,
       division,
       received,
       gameLength,
@@ -293,10 +293,10 @@ function App() {
                   {awayTeam}'s Score
                 </label>
                 <div className="control">
-                    <PullScoreSelector
-                      pullScore={pullScore}
-                      incrementPull={incrementPull}
-                      decrementPull={decrementPull}
+                    <AwayScoreSelector
+                      awayScore={awayScore}
+                      incrementAway={incrementAway}
+                      decrementAway={decrementAway}
                     />
                 </div>
               </div>
@@ -305,10 +305,10 @@ function App() {
                   {homeTeam}'s Score
                 </label>
                    <div className="control">
-                        <RecScoreSelector
-                          recScore={recScore}
-                          incrementRec={incrementRec}
-                          decrementRec={decrementRec}                        />
+                        <HomeScoreSelector
+                          homeScore={homeScore}
+                          incrementHome={incrementHome}
+                          decrementHome={decrementHome}                        />
                     </div>
                 </div>
               <div className="field">
@@ -365,7 +365,7 @@ function App() {
                   <label className="label has-text-info">
                     Away Team:{" "}
                     <span className="subtitle has-text-gray has-text-weight-light">
-                    (received starting pull)
+                    (pulled starting pull)
 
                     </span>
                   </label>
@@ -378,7 +378,7 @@ function App() {
                   <label className="label has-text-primary">
                     Home Team:{" "}
                     <span className="subtitle has-text-gray has-text-weight-light">
-                      (pulled starting pull)
+                      (received starting pull)
 
                     </span>
                   </label>

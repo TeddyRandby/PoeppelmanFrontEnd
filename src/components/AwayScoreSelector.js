@@ -1,10 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function PullScoreSelector (props) {
+function AwayScoreSelector (props) {
   const content = (
     <div class="is-flex">
-    <button class="button has-text-danger" onClick={props.decrementPull}>
+    <button class="button has-text-danger" onClick={props.decrementAway}>
       <span class="icon is-small">
       <FontAwesomeIcon
         icon="minus"
@@ -13,9 +13,9 @@ function PullScoreSelector (props) {
       </span>
     </button>
     <div class="container">
-      <p class="title content has-text-centered">{props.pullScore}</p>
+      <p class="title content has-text-centered">{props.awayScore}</p>
     </div>
-    <button class="button has-text-success" onClick={props.incrementPull}>
+    <button class="button has-text-success" onClick={props.incrementAway}>
       <span class="icon is-small">
       <FontAwesomeIcon
         icon="plus"
@@ -28,4 +28,4 @@ function PullScoreSelector (props) {
   return content;
 };
 
-export default PullScoreSelector;
+export default AwayScoreSelector;
