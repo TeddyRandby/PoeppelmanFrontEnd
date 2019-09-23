@@ -3,20 +3,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function AwayScoreSelector (props) {
   const content = (
-    <div class="is-flex">
-    <button class="button has-text-danger" onClick={props.decrementAway}>
-      <span class="icon is-small">
+    <div className="is-flex">
+    <button className="button has-text-light has-background-dark" onClick={props.decrementAway}>
+      <span className="icon is-small">
       <FontAwesomeIcon
         icon="minus"
         zsize="2x"
       />
       </span>
     </button>
-    <div class="container">
-      <p class="title content has-text-centered">{props.awayScore}</p>
+    <div className="container">
+      <p className="title content has-text-centered has-text-info">{props.awayScore}</p>
     </div>
-    <button class="button has-text-success" onClick={props.incrementAway}>
-      <span class="icon is-small">
+    <button className="button has-text-light has-background-dark" onClick={props.incrementAway}>
+      <span className="icon is-small">
       <FontAwesomeIcon
         icon="plus"
         zsize="2x"

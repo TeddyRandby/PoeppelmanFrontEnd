@@ -10,6 +10,7 @@ import ElapsedTimeSelector from "./components/ElapsedTimeSelector";
 import Stopwatch from "./components/Stopwatch";
 import HomeTeamSelector from "./components/HomeTeamSelector";
 import AwayTeamSelector from "./components/AwayTeamSelector";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function App() {
   // State monitoring the divisions.
@@ -66,28 +67,31 @@ function App() {
   };
 
   const incrementAway = () => {
-    if ( awayScore < 15) {
+    if (awayScore < 15) {
       setAwayScore(awayScore + 1);
     }
-    // setStartedReceving("1")
+    setStartedReceving("0")
   };
 
   const decrementAway = () => {
-    if ( awayScore > 0 ) {
+    if (awayScore > 0) {
       setAwayScore(awayScore - 1);
     }
-  }
+    setStartedReceving("1")
+
+  };
 
   const decrementHome = () => {
-    if ( homeScore > 0 ) {
+    if (homeScore > 0) {
       setHomeScore(homeScore - 1);
     }
-  }
+    setStartedReceving("0")
+  };
   const incrementHome = () => {
-    if ( homeScore < 15) {
+    if (homeScore < 15) {
       setHomeScore(homeScore + 1);
     }
-    // setStartedReceving("0")
+    setStartedReceving("1")
   };
 
   const receivedHandler = event => {
@@ -148,7 +152,7 @@ function App() {
           if (min < 10) {
             setMinutes("0" + min);
           } else {
-            setMinutes(min);  
+            setMinutes(min);
           }
           setSoftCap(parseInt(softCap) - 1);
           setElapsedTime(parseInt(elapsedTime) + 1);
@@ -245,7 +249,9 @@ function App() {
           setAPIResponse(poeppelman);
         })
         .catch(err => {
-          alert("No data available. Check your internet connection and make sure that the scores entered are correct.");
+          alert(
+            "No data available. Check your internet connection and make sure that the scores entered are correct."
+          );
           setAPIResponse({});
           console.log(err);
         });
@@ -264,7 +270,7 @@ function App() {
   );
 
   const content = (
-    <body>
+    <div>
       <div className="hero is-dark">
         <div className="hero-body">
           <div className="content">
@@ -293,24 +299,25 @@ function App() {
                   {awayTeam}'s Score
                 </label>
                 <div className="control">
-                    <AwayScoreSelector
-                      awayScore={awayScore}
-                      incrementAway={incrementAway}
-                      decrementAway={decrementAway}
-                    />
+                  <AwayScoreSelector
+                    awayScore={awayScore}
+                    incrementAway={incrementAway}
+                    decrementAway={decrementAway}
+                  />
                 </div>
               </div>
               <div className="field">
                 <label className="label has-text-primary">
                   {homeTeam}'s Score
                 </label>
-                   <div className="control">
-                        <HomeScoreSelector
-                          homeScore={homeScore}
-                          incrementHome={incrementHome}
-                          decrementHome={decrementHome}                        />
-                    </div>
+                <div className="control">
+                  <HomeScoreSelector
+                    homeScore={homeScore}
+                    incrementHome={incrementHome}
+                    decrementHome={decrementHome}
+                  />
                 </div>
+              </div>
               <div className="field">
                 <label className="label">Which team received this point?</label>
                 <div className="control">
@@ -365,8 +372,7 @@ function App() {
                   <label className="label has-text-info">
                     Away Team:{" "}
                     <span className="subtitle has-text-gray has-text-weight-light">
-                    (pulled starting pull)
-
+                      (pulled starting pull)
                     </span>
                   </label>
                   <div className="control">
@@ -379,7 +385,6 @@ function App() {
                     Home Team:{" "}
                     <span className="subtitle has-text-gray has-text-weight-light">
                       (received starting pull)
-
                     </span>
                   </label>
                   <div className="control">
@@ -390,7 +395,7 @@ function App() {
                   </div>
                 </React.Fragment>
               </div>
-              <div class="tile is-child section">
+              <div className="tile is-child section">
                 <h1 className="title has-text-centered has-text-weight-bold">
                   Game Stopwatch
                 </h1>
@@ -402,8 +407,11 @@ function App() {
                       stopwatchOn={stopwatchOn}
                     />
                   </React.Fragment>
-                  <button className="button has-background-dark has-text-light" onClick={stopwatchResetHandler}>
-                    Reset
+                  <button
+                    className="button has-background-dark has-text-light"
+                    onClick={stopwatchResetHandler}
+                  >
+                    RESET
                   </button>
                   <button
                     className={`button has-background-dark has-text-light button-primary-${
@@ -411,23 +419,32 @@ function App() {
                     }`}
                     onClick={stopwatchOnHandler}
                   >
-                    {stopwatchOn ? "Pause" : "Start"}
+                    {stopwatchOn ?                     <span className="icon is-small">
+                      <FontAwesomeIcon icon="pause" zsize="2x" />
+                    </span> : <span className="icon is-small">
+                      <FontAwesomeIcon icon="play" zsize="2x" />
+                    </span>}
                   </button>
                 </div>
               </div>
             </div>
 
-            <div class="tile is-parent ">
-
+            <div className="tile is-parent ">
               <div className="tile is-parent is-child is-vertical">
-              <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-info"> {apiResponse.PullTeam_Win_Prob} </div>
+                <div className="tile has-text-centered is-child box">
+                  <div className="title has-text-info">
+                    {" "}
+                    {apiResponse.PullTeam_Win_Prob}{" "}
+                  </div>
                   <div className="subtitle has-text-info">
                     {awayTeam}'s Win Probability
                   </div>
                 </div>
                 <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-info"> {apiResponse.PullTeam_Avg_Score} </div>
+                  <div className="title has-text-info">
+                    {" "}
+                    {apiResponse.PullTeam_Avg_Score}{" "}
+                  </div>
                   <div className="subtitle has-text-info">
                     {awayTeam}'s Predicted Score
                   </div>
@@ -435,14 +452,20 @@ function App() {
               </div>
               <div className="tile is-parent is-child is-vertical">
                 <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-primary"> {apiResponse.RecTeam_Win_Prob} </div>
+                  <div className="title has-text-primary">
+                    {" "}
+                    {apiResponse.RecTeam_Win_Prob}{" "}
+                  </div>
                   <div className="subtitle has-text-primary">
                     {homeTeam}'s Win Probability
                   </div>
                 </div>
 
                 <div className="tile has-text-centered is-child box">
-                  <div className="title has-text-primary"> {apiResponse.RecTeam_Avg_Score} </div>
+                  <div className="title has-text-primary">
+                    {" "}
+                    {apiResponse.RecTeam_Avg_Score}{" "}
+                  </div>
                   <div className="subtitle has-text-primary">
                     {homeTeam}'s Predicted Score
                   </div>
@@ -454,12 +477,18 @@ function App() {
       </div>
       <div className="footer has-background-white">
         <div className="content has-text-centered">
-          <p>React App Programming: Teddy Randby - <a class="has-text-link"href="https://github.com/TeddyRandby"> Find me on Github </a></p>
+          <p>
+            React App Programming: Teddy Randby -{" "}
+            <a className="has-text-link" href="https://github.com/TeddyRandby">
+              {" "}
+              Find me on Github{" "}
+            </a>
+          </p>
           <p>Monte Carlo Programming (R): Craig Poeppleman </p>
-          <p>Concept: Charles Kerr </p> 
+          <p>Concept: Charles Kerr </p>
         </div>
       </div>
-    </body>
+    </div>
   );
 
   return content;
