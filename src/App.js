@@ -33,7 +33,7 @@ function App() {
 
   const [teamFirstRec, setFirstRec] = useState("away");
 
-  const [homePulledFirst, setHomePulledFirst] = useState(true);
+  const [homePulledFirst, setHomePulledFirst] = useState(false);
 
   // State monitoring when hard cap comes on.
   const [softCap, setSoftCap] = useState("85");
