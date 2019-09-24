@@ -237,7 +237,7 @@ function App() {
       }
 
       // If more than 85 minutes have elapsed, hard cap is on.
-      if (parseInt(elapsedMin) > 85) {
+      if (parseInt(elapsedMin) > gameLength) {
         capOn = "1";
         timeElapsed = "5";
       }
