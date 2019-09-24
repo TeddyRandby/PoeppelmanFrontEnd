@@ -3,7 +3,7 @@ import React from "react";
 function ReceivingSelector(props) {
   const content = (
     <div className="field">
-      <label className="label">Which team received this point?</label>
+      <label className="label">Receiving Team</label>
       <div className="control">
         <div className="select">
           <select onChange={props.onReceivingUpdate} value={props.received}>

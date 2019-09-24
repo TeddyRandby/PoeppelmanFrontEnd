@@ -206,7 +206,7 @@ function App() {
       let ole_rate = "0.63";
       let capOn = "0";
       let secondHalf = "0";
-      let timeElapsed = gameLength - softCap;
+      let timeElapsed = elapsedMin;
       let receiving;
       let recScore;
       let pullScore;
@@ -218,6 +218,7 @@ function App() {
         recScore = awayScore;
         pullScore = homeScore;
       }
+
       // If the receiving team received to start the game, receiving should be 1. Else, 0.
       if (teamFirstRec == received) {
         receiving = "1";
@@ -236,7 +237,7 @@ function App() {
       }
 
       // If more than 85 minutes have elapsed, hard cap is on.
-      if (parseInt(gameLength) > 85) {
+      if (parseInt(elapsedMin) > 85) {
         capOn = "1";
         timeElapsed = "5";
       }
@@ -284,18 +285,10 @@ function App() {
           poeppelman.RecTeam_Win_Prob = (recProb * 100).toString();
           poeppelman.PullTeam_Win_Prob = (pullProb * 100).toString();
 
-          poeppelman.RecTeam_Win_Prob =
-            poeppelman.RecTeam_Win_Prob.substring(0, 4) + "%";
-          poeppelman.RecTeam_Avg_Score = poeppelman.RecTeam_Avg_Score.substring(
-            0,
-            4
-          );
-          poeppelman.PullTeam_Win_Prob =
-            poeppelman.PullTeam_Win_Prob.substring(0, 4) + "%";
-          poeppelman.PullTeam_Avg_Score = poeppelman.PullTeam_Avg_Score.substring(
-            0,
-            4
-          );
+          poeppelman.RecTeam_Win_Prob = Math.round(poeppelman.RecTeam_Win_Prob) + "%";
+          poeppelman.RecTeam_Avg_Score = Math.round(poeppelman.RecTeam_Avg_Score);
+          poeppelman.PullTeam_Win_Prob = Math.round(poeppelman.PullTeam_Win_Prob) + "%";
+          poeppelman.PullTeam_Avg_Score = Math.round(poeppelman.PullTeam_Avg_Score)
 
           setAPIResponse(poeppelman);
           setLoading(false);
@@ -306,10 +299,11 @@ function App() {
           );
           setAPIResponse({});
           console.log(err);
+          setLoading(false);
         });
     },
     // This array contains the whitelisted states which will "call" this useEffect when changed.
-    [awayScore, homeScore, division, received, elapsedMin, teamFirstRec]
+    [awayScore, homeScore, division, received, elapsedMin, teamFirstRec, gameLength]
   );
 
   const content = (
