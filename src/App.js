@@ -285,10 +285,10 @@ function App() {
           poeppelman.RecTeam_Win_Prob = (recProb * 100).toString();
           poeppelman.PullTeam_Win_Prob = (pullProb * 100).toString();
 
-          poeppelman.RecTeam_Win_Prob = Math.round(poeppelman.RecTeam_Win_Prob) + "%";
-          poeppelman.RecTeam_Avg_Score = Math.round(poeppelman.RecTeam_Avg_Score);
-          poeppelman.PullTeam_Win_Prob = Math.round(poeppelman.PullTeam_Win_Prob) + "%";
-          poeppelman.PullTeam_Avg_Score = Math.round(poeppelman.PullTeam_Avg_Score)
+          poeppelman.RecTeam_Win_Prob = (Math.round(poeppelman.RecTeam_Win_Prob * 100)) / 100 + "%";
+          poeppelman.RecTeam_Avg_Score = (Math.round(poeppelman.RecTeam_Avg_Score * 100)) / 100;
+          poeppelman.PullTeam_Win_Prob = (Math.round(poeppelman.PullTeam_Win_Prob * 100)) / 100 + "%";
+          poeppelman.PullTeam_Avg_Score = (Math.round(poeppelman.PullTeam_Avg_Score * 100)) / 100;
 
           setAPIResponse(poeppelman);
           setLoading(false);
