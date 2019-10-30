@@ -14,7 +14,7 @@ function ElapsedTimeSelector(props) {
         />
       </div>
       <button
-          className={`button has-background-dark has-text-light button-primary-${
+          className={`button has-background-white has-text-link button-primary-${
             props.stopwatchOn ? "active" : "inactive"
           }`}
           onClick={props.stopwatchOnHandler}

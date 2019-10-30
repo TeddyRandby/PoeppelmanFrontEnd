@@ -312,7 +312,7 @@ function App() {
       <div className="hero is-dark">
         <div className="hero-body">
           <div className="content">
-            <h1 className="title has-text-light"> Poeppelman Calculator </h1>
+            <h1 className="title has-text-white"> Poeppelman Calculator </h1>
           </div>
         </div>
       </div>

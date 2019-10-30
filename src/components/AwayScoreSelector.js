@@ -8,7 +8,7 @@ function AwayScoreSelector(props) {
       <div className="control">
         <div className="is-flex">
           <button
-            className="button has-text-light has-background-dark"
+            className="button has-text-link has-background-white border"
             onClick={props.decrementAway}
           >
             <span className="icon is-small">
@@ -21,7 +21,7 @@ function AwayScoreSelector(props) {
             </p>
           </div>
           <button
-            className="button has-text-light has-background-dark"
+            className="button has-text-link has-background-white"
             onClick={props.incrementAway}
           >
             <span className="icon is-small">

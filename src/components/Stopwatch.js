@@ -12,13 +12,13 @@ function Stopwatch(props) {
           {props.minutes}:{props.seconds}
         </div>
         <button
-          className="button has-background-danger has-text-light"
+          className="button has-background-white has-text-link has-text-weight-bold"
           onClick={props.stopwatchResetHandler}
         >
           RESET
         </button>
         <button
-          className={`button has-background-dark has-text-light button-primary-${
+          className={`button has-background-white has-text-link button-primary-${
             props.stopwatchOn ? "active" : "inactive"
           }`}
           onClick={props.stopwatchOnHandler}

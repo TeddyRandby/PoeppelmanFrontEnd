@@ -9,7 +9,7 @@ $home: #335C67 ;
 $away: #335C67;
 $background: #E0DFD5;
 $loading: #EF6461;
-$menu: #E4B363;
+$highlight: #E4B363;
 
 // Update Bulma's global variables
 $family-sans-serif: "Nunito", sans-serif;
@@ -18,7 +18,7 @@ $light: $background;
 $primary: $home;
 $info: $away;
 $danger: $loading;
-$link: $menu;
+$link: $highlight;
 
 
 @import "../node_modules/bulma/bulma.sass";
