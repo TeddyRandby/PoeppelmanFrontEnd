@@ -8,45 +8,45 @@ function ResponseRenderer(props) {
       <div className="tile is-parent ">
         <div className="tile is-parent is-child is-vertical">
           <div className="tile has-text-centered is-child box">
-            <div className="title has-text-info">
+            <div className="title has-text-danger">
               <span className="icon is-small">
                 <FontAwesomeIcon icon="spinner" zsize="2x" spin />
               </span>
             </div>
-            <div className="subtitle has-text-info">
+            <div className="subtitle has-text-dark">
               {props.awayTeam}'s Win Probability
             </div>
           </div>
           <div className="tile has-text-centered is-child box">
-            <div className="title has-text-info">
+            <div className="title has-text-danger">
               <span className="icon is-small">
                 <FontAwesomeIcon icon="spinner" zsize="2x" spin/>
               </span>
             </div>
-            <div className="subtitle has-text-info">
+            <div className="subtitle has-text-dark">
               {props.awayTeam}'s Predicted Score
             </div>
           </div>
         </div>
         <div className="tile is-parent is-child is-vertical">
           <div className="tile has-text-centered is-child box">
-            <div className="title has-text-primary">
+            <div className="title has-text-danger">
               <span className="icon is-small">
                 <FontAwesomeIcon icon="spinner" zsize="2x" spin/>
               </span>
             </div>
-            <div className="subtitle has-text-primary">
+            <div className="subtitle has-text-dark">
               {props.homeTeam}'s Win Probability
             </div>
           </div>
 
           <div className="tile has-text-centered is-child box">
-            <div className="title has-text-primary">
+            <div className="title has-text-danger">
               <span className="icon is-small">
                 <FontAwesomeIcon icon="spinner" zsize="2x" spin/>
               </span>
             </div>
-            <div className="subtitle has-text-primary">
+            <div className="subtitle has-text-dark">
               {props.homeTeam}'s Predicted Score
             </div>
           </div>
@@ -64,7 +64,7 @@ function ResponseRenderer(props) {
                 {" "}
                 {props.apiResponse.RecTeam_Win_Prob}{" "}
               </div>
-              <div className="subtitle has-text-info">
+              <div className="subtitle has-text-dark">
                 {props.awayTeam}'s Win Probability
               </div>
             </div>
@@ -73,7 +73,7 @@ function ResponseRenderer(props) {
                 {" "}
                 {props.apiResponse.RecTeam_Avg_Score}{" "}
               </div>
-              <div className="subtitle has-text-info">
+              <div className="subtitle has-text-dark">
                 {props.awayTeam}'s Predicted Score
               </div>
             </div>
@@ -84,7 +84,7 @@ function ResponseRenderer(props) {
                 {" "}
                 {props.apiResponse.PullTeam_Win_Prob}{" "}
               </div>
-              <div className="subtitle has-text-primary">
+              <div className="subtitle has-text-dark">
                 {props.homeTeam}'s Win Probability
               </div>
             </div>
@@ -94,7 +94,7 @@ function ResponseRenderer(props) {
                 {" "}
                 {props.apiResponse.PullTeam_Avg_Score}{" "}
               </div>
-              <div className="subtitle has-text-primary">
+              <div className="subtitle has-text-dark">
                 {props.homeTeam}'s Predicted Score
               </div>
             </div>

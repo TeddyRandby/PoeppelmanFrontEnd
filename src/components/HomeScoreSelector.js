@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function HomeScoreSelector(props) {
   const content = (
     <div className="field">
-      <label className="label has-text-primary">{props.homeTeam}'s Score</label>
+      <label className="label has-text-dark">{props.homeTeam}'s Score</label>
       <div className="control">
         <div className="is-flex">
           <button

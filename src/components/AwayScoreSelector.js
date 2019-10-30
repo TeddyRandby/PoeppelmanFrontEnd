@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function AwayScoreSelector(props) {
   const content = (
     <div className="field">
-      <label className="label has-text-info">{props.awayTeam}'s Score</label>
+      <label className="label has-text-dark">{props.awayTeam}'s Score</label>
       <div className="control">
         <div className="is-flex">
           <button

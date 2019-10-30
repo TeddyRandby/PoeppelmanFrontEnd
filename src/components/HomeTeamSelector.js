@@ -3,9 +3,9 @@ import React from "react";
 function HomeTeamSelector(props) {
   const content = (
     <div>
-      <label className="label has-text-primary">
+      <label className="label has-text-dark">
         Home Team:{" "}
-        <span className="subtitle is-pulled-right has-text-weight-light">
+        <span className="label has-text-dark is-pulled-right has-text-weight-light">
           <label className="checkbox">
             <input 
               className="checkbox"

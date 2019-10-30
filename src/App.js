@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../node_modules/bulma/css/bulma.css";
+import "./css/styles.css";
+
 import HomeScoreSelector from "./components/HomeScoreSelector";
 import AwayScoreSelector from "./components/AwayScoreSelector";
 import GameLengthSelector from "./components/GameLengthSelector";
@@ -311,7 +312,7 @@ function App() {
       <div className="hero is-dark">
         <div className="hero-body">
           <div className="content">
-            <h1 className="title"> Poeppelman Calculator </h1>
+            <h1 className="title has-text-light"> Poeppelman Calculator </h1>
           </div>
         </div>
       </div>

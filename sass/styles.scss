@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+
+// Set your brand colors
+$banner: #313638;
+$home: #335C67 ;
+$away: #335C67;
+$background: #E0DFD5;
+$loading: #EF6461;
+$menu: #E4B363;
+
+// Update Bulma's global variables
+$family-sans-serif: "Nunito", sans-serif;
+$dark: $banner;
+$light: $background;
+$primary: $home;
+$info: $away;
+$danger: $loading;
+$link: $menu;
+
+
+@import "../node_modules/bulma/bulma.sass";
